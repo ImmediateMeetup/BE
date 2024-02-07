@@ -6,11 +6,10 @@ spring:
     allow-circular-references: true
 
   datasource:
-    url: jdbc:mysql://immediate-meetup-database.c8voaqaignj7.ap-northeast-2.rds.amazonaws.com/Immediate_Meetup_Server_RDS
-    # url ??? jdbc:mysql://RDS? EndPoint/?? DB ????
+    url: ${DB_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: admin
-    password: meetup1234
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
