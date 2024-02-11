@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.global.config;
+package com.example.immediatemeetupbe.global.exception;
 
 
 public class BaseException extends RuntimeException {

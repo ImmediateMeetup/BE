@@ -1,6 +1,6 @@
 package com.example.immediatemeetupbe.global.error.exception;
 
-import com.example.immediatemeetupbe.global.config.BaseExceptionStatus;
+import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
 
 public class NoAuthException extends RuntimeException{
 

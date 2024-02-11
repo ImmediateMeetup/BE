@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.global.config;
+package com.example.immediatemeetupbe.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
