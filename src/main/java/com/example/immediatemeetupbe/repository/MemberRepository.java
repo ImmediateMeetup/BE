@@ -1,6 +1,6 @@
-package com.example.immediatemeetupbe.domain.User.repository;
+package com.example.immediatemeetupbe.repository;
 
-import com.example.immediatemeetupbe.domain.User.entity.Member;
+import com.example.immediatemeetupbe.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

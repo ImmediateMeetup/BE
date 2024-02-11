@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.domain.User.entity;
+package com.example.immediatemeetupbe.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

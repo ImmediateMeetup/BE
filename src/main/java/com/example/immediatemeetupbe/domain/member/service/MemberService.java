@@ -1,8 +1,8 @@
-package com.example.immediatemeetupbe.domain.User.service;
+package com.example.immediatemeetupbe.domain.member.service;
 
-import com.example.immediatemeetupbe.domain.User.dto.request.MemberSignUpRequest;
-import com.example.immediatemeetupbe.domain.User.entity.Member;
-import com.example.immediatemeetupbe.domain.User.repository.MemberRepository;
+import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
+import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.repository.MemberRepository;
 import com.example.immediatemeetupbe.global.error.exception.EmailAlreadyExistException;
 import com.example.immediatemeetupbe.global.error.exception.PasswordUncheckedException;
 import lombok.RequiredArgsConstructor;

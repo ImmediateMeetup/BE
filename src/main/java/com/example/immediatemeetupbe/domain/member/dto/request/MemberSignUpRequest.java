@@ -1,6 +1,6 @@
-package com.example.immediatemeetupbe.domain.User.dto.request;
+package com.example.immediatemeetupbe.domain.member.dto.request;
 
-import com.example.immediatemeetupbe.domain.User.entity.Member;
+import com.example.immediatemeetupbe.domain.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
