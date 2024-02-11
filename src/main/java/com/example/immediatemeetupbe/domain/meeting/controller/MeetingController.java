@@ -32,4 +32,10 @@ public class MeetingController {
         MeetingResponse meetingResponse = meetingService.getMeetingInfoById(id);
         return ResponseEntity.ok().body(meetingResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMeeting(@PathVariable("id") Long id) {
+        meetingService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -40,4 +40,14 @@ public class MeetingService {
         Meeting meeting = meetingRepository.getById(id);
         return MeetingResponse.from(meeting);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        if (meetingRepository.existsById(id)) {
+            throw new BaseException(NO_EXIST_MEETING.getMessage());
+        }
+
+        Meeting meeting = meetingRepository.getById(id);
+        meetingRepository.delete(meeting);
+    }
 }
