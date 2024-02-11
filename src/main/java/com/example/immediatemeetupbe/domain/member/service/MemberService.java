@@ -1,12 +1,15 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
+import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import com.example.immediatemeetupbe.repository.MemberRepository;
+import com.example.immediatemeetupbe.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
 
     @Transactional
@@ -49,6 +54,15 @@ public class MemberService {
         List<String> roles = new ArrayList<>();
         roles.add(member.getAuthority().name());
 
-        return tokenProvider.createToken(member.getEmail(), roles);
+        TokenDto token = tokenProvider.createAllToken(member.getEmail(), roles);
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByEmail(member.getEmail());
+        if(refreshToken.isPresent()) {
+            refreshTokenRepository.save(refreshToken.get().updateToken(token.getRefreshToken()));
+        } else {
+            RefreshToken newToken = new RefreshToken(token.getRefreshToken(), request.getEmail());
+            refreshTokenRepository.save(newToken);
+        }
+
+        return token.getAccessToken();
     }
 }
