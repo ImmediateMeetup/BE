@@ -1,10 +1,10 @@
 package com.example.immediatemeetupbe.global.error.exception;
 
-import com.example.immediatemeetupbe.global.error.Error;
+import com.example.immediatemeetupbe.global.config.BaseExceptionStatus;
 
 public class FollowNestingException extends RuntimeException {
 
     public FollowNestingException() {
-        super(Error.FOLLOW_NESTING.getMessage());
+        super(BaseExceptionStatus.FOLLOW_NESTING.getMessage());
     }
 }

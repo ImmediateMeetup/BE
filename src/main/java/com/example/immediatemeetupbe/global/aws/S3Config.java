@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.global.config.aws;
+package com.example.immediatemeetupbe.global.aws;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

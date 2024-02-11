@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.global.config.security;
+package com.example.immediatemeetupbe.global.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

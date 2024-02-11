@@ -1,10 +1,10 @@
 package com.example.immediatemeetupbe.global.error.exception;
 
-import com.example.immediatemeetupbe.global.error.Error;
+import com.example.immediatemeetupbe.global.config.BaseExceptionStatus;
 
 public class PasswordUncheckedException extends RuntimeException {
 
     public PasswordUncheckedException() {
-        super(Error.PASSWORD_UNCHECK.getMessage());
+        super(BaseExceptionStatus.PASSWORD_UNCHECK.getMessage());
     }
 }
