@@ -1,6 +1,7 @@
 package com.example.immediatemeetupbe.domain.member.dto.request;
 
 import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,7 @@ public class MemberSignUpRequest {
                 .password(password)
                 .address(address)
                 .phoneNumber(phoneNumber)
+                .authority(Authority.USER)
                 .build();
     }
 }

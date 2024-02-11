@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.entity;
 
+import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,13 @@ public class Member {
     @Column(name = "profile_image")
     private String profileImage;
 
+    private Authority authority;
+
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
+    }
+
+    public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
     }
 }

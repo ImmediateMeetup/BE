@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.controller;
 
+import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -21,5 +22,10 @@ public class MemberController {
     public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
         memberService.signUp(memberSignUpRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody MemberLoginRequest memberLoginRequest) {
+        return ResponseEntity.ok(memberService.login(memberLoginRequest));
     }
 }
