@@ -1,7 +1,7 @@
-package com.example.immediatemeetupbe.domain.User.controller;
+package com.example.immediatemeetupbe.domain.member.controller;
 
-import com.example.immediatemeetupbe.domain.User.dto.request.MemberSignUpRequest;
-import com.example.immediatemeetupbe.domain.User.service.MemberService;
+import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
+import com.example.immediatemeetupbe.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

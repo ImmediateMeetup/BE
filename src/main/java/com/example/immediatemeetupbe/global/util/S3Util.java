@@ -22,6 +22,7 @@ public class S3Util {
     public String uploadFile(MultipartFile file) {
         try {
             String fileName = file.getOriginalFilename();
+
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
