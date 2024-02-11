@@ -1,10 +1,10 @@
 package com.example.immediatemeetupbe.global.error.exception;
 
-import com.example.immediatemeetupbe.global.error.Error;
+import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
 
 public class WrongPasswordException extends RuntimeException {
 
     public WrongPasswordException() {
-        super(Error.WRONG_PASSWORD.getMessage());
+        super(BaseExceptionStatus.WRONG_PASSWORD.getMessage());
     }
 }

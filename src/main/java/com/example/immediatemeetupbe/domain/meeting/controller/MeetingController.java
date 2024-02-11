@@ -2,6 +2,7 @@ package com.example.immediatemeetupbe.domain.meeting.controller;
 
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingModifyRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterRequest;
+import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,18 @@ public class MeetingController {
     @PatchMapping
     public ResponseEntity<Void> modifyMeeting(@RequestBody MeetingModifyRequest meetingModifyRequest) {
         meetingService.modify(meetingModifyRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MeetingResponse> getMeetingInfo(@PathVariable("id") Long id) {
+        MeetingResponse meetingResponse = meetingService.getMeetingInfoById(id);
+        return ResponseEntity.ok().body(meetingResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMeeting(@PathVariable("id") Long id) {
+        meetingService.delete(id);
         return ResponseEntity.ok().build();
     }
 }
