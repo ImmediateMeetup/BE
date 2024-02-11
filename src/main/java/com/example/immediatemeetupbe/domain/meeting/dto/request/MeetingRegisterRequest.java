@@ -12,13 +12,18 @@ public class MeetingRegisterRequest {
     private String content;
     private String firstDay;
     private String lastDay;
+    private String timeZone;
 
-    public Meeting toEntity(){
+
+    public Meeting toEntity() {
         return Meeting.builder()
-                .title(title)
-                .content(content)
-                .firstDay(firstDay)
-                .lastDay(lastDay)
-                .build();
+            .title(title)
+            .content(content)
+            .firstDay(firstDay)
+            .lastDay(lastDay)
+            .timeZone(timeZone)
+            .build();
     }
 }
+
+
