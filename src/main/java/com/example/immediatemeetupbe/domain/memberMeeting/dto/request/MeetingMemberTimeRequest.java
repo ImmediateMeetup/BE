@@ -1,11 +1,11 @@
-package com.example.immediatemeetupbe.domain.meeting.dto.request;
+package com.example.immediatemeetupbe.domain.memberMeeting.dto.request;
 
 import java.time.LocalTime;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class MeetingUserTimeRequest {
+public class MeetingMemberTimeRequest {
 
     private List<LocalTime> timeList;
 }
