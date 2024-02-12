@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class MeetingMemberResponse {
 
-    private Hashtable<LocalDateTime, Integer> timeTable;
+    private final Hashtable<LocalDateTime, Integer> timeTable;
 
     public MeetingMemberResponse(Hashtable<LocalDateTime, Integer> timeTable) {
         this.timeTable = timeTable;
