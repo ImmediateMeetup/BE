@@ -1,6 +1,7 @@
 package com.example.immediatemeetupbe.domain.memberMeeting.controller;
 
 import com.example.immediatemeetupbe.domain.memberMeeting.dto.request.MeetingMemberTimeRequest;
+import com.example.immediatemeetupbe.domain.memberMeeting.dto.response.MeetingMemberResponse;
 import com.example.immediatemeetupbe.domain.memberMeeting.service.MeetingMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,11 @@ public class MeetingMemberController {
 
 
     @PostMapping("/{meeting_id}")
-    public ResponseEntity<Void> registerUserTime(@PathVariable("meeting_id") Long meetingId,
-        @RequestHeader String token,
+    public ResponseEntity<MeetingMemberResponse> registerUserTime(
+        @PathVariable("meeting_id") Long meetingId,
         @RequestBody MeetingMemberTimeRequest meetingMemberTimeRequest) {
-        return meetingMemberService.registerMemberTime(meetingId, token, meetingMemberTimeRequest);
+        return ResponseEntity.ok().body(
+            meetingMemberService.registerMemberTime(meetingId, meetingMemberTimeRequest));
     }
 
 }

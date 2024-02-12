@@ -9,6 +9,7 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
@@ -30,7 +31,18 @@ public class MeetingMember {
     @Column(name = "time_zone")
     private String timeZone;
 
-    public void registerMemberTime(String memberTimeZone) {
-        this.timeZone = memberTimeZone;
+    @Builder
+    public MeetingMember(Member member, Meeting meeting, String timeZone) {
+        this.member = member;
+        this.meeting = meeting;
+        this.timeZone = timeZone;
+    }
+
+    public MeetingMember() {
+
+    }
+
+    public void registerMemberTime(String timeZone) {
+        this.timeZone = timeZone;
     }
 }
