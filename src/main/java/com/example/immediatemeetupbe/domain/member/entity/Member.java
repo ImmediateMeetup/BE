@@ -40,9 +40,6 @@ public class Member {
 
     private Authority authority;
 
-    @Column(name = "time_zone")
-    private String timeZone;
-
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
@@ -50,8 +47,5 @@ public class Member {
     public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
     }
-
-    public void register(String timeZone) {
-        this.timeZone = timeZone;
-    }
+    
 }
