@@ -7,7 +7,6 @@ import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResp
 import com.example.immediatemeetupbe.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
