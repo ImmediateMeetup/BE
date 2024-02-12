@@ -2,11 +2,14 @@ package com.example.immediatemeetupbe.domain.member.service;
 
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
+import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
+import com.example.immediatemeetupbe.global.aws.S3Util;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
+import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import com.example.immediatemeetupbe.repository.MemberRepository;
 import com.example.immediatemeetupbe.repository.RefreshTokenRepository;
@@ -27,6 +30,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
+    private final AuthUtil authUtil;
+    private final S3Util s3Util;
 
     @Transactional
     public void signUp(MemberSignUpRequest request) {
@@ -64,5 +69,21 @@ public class MemberService {
         }
 
         return token.getAccessToken();
+    }
+
+    @Transactional
+    public void modifyProfile(MemberModifyRequest request) {
+        Member member = authUtil.getLoginMember();
+
+        if (request.getProfileImage() != null) {
+            String profileImage = s3Util.uploadFile(request.getProfileImage());
+            member.modify(request.getEmail(), request.getName(), profileImage,
+                    request.getPhoneNumber(), request.getAddress());
+            return;
+        }
+
+        member.modify(request.getEmail(), request.getName(),
+                member.getProfileImage(), request.getPhoneNumber(),
+                request.getAddress());
     }
 }
