@@ -1,9 +1,12 @@
 package com.example.immediatemeetupbe.domain.member.entity;
 
+import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Set;
 
 @Entity
 @Getter

@@ -52,6 +52,7 @@ public class Meeting {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
+
     public void update(String title, String content, String firstDay, String lastDay) {
         this.title = title;
         this.content = content;

@@ -1,10 +1,14 @@
 package com.example.immediatemeetupbe.global.jwt;
 
 import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.ERROR_GET_MEMBER;
+import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEMBER;
 
 @Component
 @RequiredArgsConstructor
@@ -16,9 +20,9 @@ public class AuthUtil {
         try {
             String loginMember = SecurityContextHolder.getContext().getAuthentication().getName();
             return memberRepository.findByEmail(loginMember)
-                    .orElseThrow(() -> new RuntimeException("ID에 해당하는 회원을 찾을 수 없습니다. ID: " + loginMember));
-        } catch (Exception e) {
-            throw new RuntimeException("로그인 멤버를 가져오는 중 오류가 발생했습니다.", e);
+                    .orElseThrow(() -> new BaseException(NO_EXIST_MEMBER + loginMember));
+        } catch (BaseException e) {
+            throw new BaseException(ERROR_GET_MEMBER.getMessage());
         }
     }
 }
