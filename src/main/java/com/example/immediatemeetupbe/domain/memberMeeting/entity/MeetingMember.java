@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.domain.member_meeting.entity;
+package com.example.immediatemeetupbe.domain.memberMeeting.entity;
 
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
@@ -29,4 +29,8 @@ public class MeetingMember {
 
     @Column(name = "time_zone")
     private String timeZone;
+
+    public void registerMemberTime(String memberTimeZone) {
+        this.timeZone = memberTimeZone;
+    }
 }
