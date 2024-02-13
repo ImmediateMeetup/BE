@@ -30,12 +30,6 @@ public class MeetingMember {
     @Column(name = "time_zone")
     private String timeZone;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<Comment> commentMemberList;
-
-    @OneToMany(mappedBy = "meeting", orphanRemoval = true)
-    private List<Comment> commentMeetingList;
-
     @Builder
     public MeetingMember(Member member, Meeting meeting, String timeZone) {
         this.member = member;

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,6 +40,9 @@ public class Member {
     private String profileImage;
 
     private Authority authority;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Comment> commentMemberList;
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);

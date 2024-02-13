@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class CommentReplyRequest {
 
+    private Long meeting;
     private Long parentId;
     private String content;
 
