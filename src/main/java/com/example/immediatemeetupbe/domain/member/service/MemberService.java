@@ -1,10 +1,13 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
+import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
+import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
+import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import com.example.immediatemeetupbe.global.aws.S3Util;
@@ -64,7 +67,7 @@ public class MemberService {
     @Transactional
     public String login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NO_AUTH_MEMBER.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage()));
 
         if (!member.checkPassword(passwordEncoder, request.getPassword())) {
             throw new BaseException(BaseExceptionStatus.WRONG_PASSWORD.getMessage());
@@ -120,11 +123,55 @@ public class MemberService {
     }
 
     public EmailConfirmResponse verifiedCode(String email, String authCode) {
-        this.checkDuplicatedEmail(email);
+        checkDuplicatedEmail(email);
         String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
         if(redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode)) {
            return EmailConfirmResponse.from("인증 성공");
         }
         return EmailConfirmResponse.from("인증 실패");
+    }
+
+    @Transactional
+    public void editPassword(EditPasswordRequest request) {
+        if(!request.getPassword().equals(request.getCheckPassword())) {
+            throw new BaseException(BaseExceptionStatus.PASSWORD_UNCHECK.getMessage());
+        }
+
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage()));
+        String password = passwordEncoder.encode(request.getPassword());
+
+        member.editPassword(password);
+    }
+
+    @Transactional
+    public void deleteMember() {
+        Member member = authUtil.getLoginMember();
+        memberRepository.delete(member);
+    }
+
+    public MemberProfileResponse retrieveMyProfile() {
+        Member member = authUtil.getLoginMember();
+
+        return MemberProfileResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .image(member.getProfileImage())
+                .phoneNumber(member.getPhoneNumber())
+                .address(member.getAddress())
+                .build();
+    }
+
+    public MemberProfileResponse retrieveMemberProfile(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NO_EXIST_ENTITY.getMessage()));
+
+        return MemberProfileResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .image(member.getProfileImage())
+                .phoneNumber(member.getPhoneNumber())
+                .address(member.getAddress())
+                .build();
     }
 }

@@ -1,14 +1,23 @@
 package com.example.immediatemeetupbe.domain.meeting.service;
 
+import com.example.immediatemeetupbe.domain.meeting.dto.MeetingDto;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingModifyRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterRequest;
+import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
+import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
+import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.global.exception.BaseException;
+import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.repository.MeetingRepository;
+import com.example.immediatemeetupbe.repository.MemberMeetingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEETING;
 
@@ -17,6 +26,8 @@ import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus
 public class MeetingService {
 
     private final MeetingRepository meetingRepository;
+    private final MemberMeetingRepository memberMeetingRepository;
+    private final AuthUtil authUtil;
 
     @Transactional
     public void register(MeetingRegisterRequest meetingRegisterRequest) {
@@ -57,5 +68,19 @@ public class MeetingService {
 
         Meeting meeting = meetingRepository.getById(id);
         meetingRepository.delete(meeting);
+    }
+
+    @Transactional(readOnly = true)
+    public MeetingListResponse getAllMeetings() {
+        Member member = authUtil.getLoginMember();
+        List<MeetingMember> meetingMemberList = memberMeetingRepository.findAllByMember(member);
+
+        List<MeetingDto> meetingDtoList = meetingMemberList.stream()
+                .map(meetingMember -> MeetingDto.from(meetingMember.getMeeting()))
+                .toList();
+
+        return MeetingListResponse.builder()
+                .meetings(meetingDtoList)
+                .build();
     }
 }

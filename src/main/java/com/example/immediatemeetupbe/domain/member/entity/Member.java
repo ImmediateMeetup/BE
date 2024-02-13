@@ -59,4 +59,8 @@ public class Member {
         this.phoneNumber = (phoneNumber != null) ? phoneNumber : this.phoneNumber;
         this.address = (email != null) ? address : this.address;
     }
+
+    public void editPassword(String password) {
+        this.password = password;
+    }
 }
