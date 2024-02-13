@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.meeting.entity;
 
+import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -8,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -51,6 +53,10 @@ public class Meeting {
     @LastModifiedDate
     @Column(name = "update_at")
     private LocalDateTime updateAt;
+
+    @OneToMany(mappedBy = "meeting", orphanRemoval = true)
+    private List<Comment> commentMeetingList;
+
 
     public void update(String title, String content, String firstDay, String lastDay) {
         this.title = title;

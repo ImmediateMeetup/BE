@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.domain.memberMeeting.valueObject;
+package com.example.immediatemeetupbe.domain.meetingMember.valueObject;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

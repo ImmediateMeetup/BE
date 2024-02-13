@@ -14,7 +14,6 @@ public class MeetingRegisterRequest {
     private String lastDay;
     private String timeZone;
 
-
     public Meeting toEntity() {
         return Meeting.builder()
             .title(title)

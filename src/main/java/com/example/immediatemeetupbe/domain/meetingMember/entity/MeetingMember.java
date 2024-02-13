@@ -1,19 +1,18 @@
-package com.example.immediatemeetupbe.domain.memberMeeting.entity;
+package com.example.immediatemeetupbe.domain.meetingMember.entity;
 
+import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 @IdClass(MeetingMemberId.class)
 @Table(name = "meeting_member")
 public class MeetingMember {
@@ -36,10 +35,6 @@ public class MeetingMember {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;
-    }
-
-    public MeetingMember() {
-
     }
 
     public void registerMemberTime(String timeZone) {
