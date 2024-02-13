@@ -24,13 +24,11 @@ public class TimeTable {
     }
 
     public void calculateSchedule(List<MeetingMember> meetingMemberList) {
-        meetingMemberList.forEach(meetingMember -> {
+        meetingMemberList.forEach(meetingMember ->
             Arrays.stream(meetingMember.getTimeZone().split("/"))
                 .map(LocalDateTime::parse)
-                .forEach(
-                    timezone -> {
-                        timeTable.put(timezone, timeTable.get(timezone) + 1);
-                    });
-        });
+                .forEach(timezone -> timeTable.put(timezone, timeTable.get(timezone) + 1))
+        );
     }
+
 }
