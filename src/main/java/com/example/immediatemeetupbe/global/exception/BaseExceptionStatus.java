@@ -17,6 +17,7 @@ public enum BaseExceptionStatus {
     FOLLOW_NESTING("이미 팔로우 중입니다."),
     PASSWORD_UNCHECK("비밀번호가 일치하지 않습니다."),
     WRONG_PASSWORD("비밀번호가 틀렸습니다."),
+    NOT_VALIDATE_EMAIL("유효하지 않는 이메일입니다."),
 
     // MEETING
     NO_EXIST_MEETING("존재하지 않는 약속방 입니다.");

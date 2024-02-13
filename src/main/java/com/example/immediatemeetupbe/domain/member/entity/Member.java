@@ -44,5 +44,12 @@ public class Member {
     public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
     }
-    
+
+    public void modify(String email, String name, String profileImage, String phoneNumber, String address) {
+        this.email = (email != null) ? email : this.email;
+        this.name = (name != null) ? name : this.name;
+        this.profileImage = profileImage;
+        this.phoneNumber = (phoneNumber != null) ? phoneNumber : this.phoneNumber;
+        this.address = (email != null) ? address : this.address;
+    }
 }
