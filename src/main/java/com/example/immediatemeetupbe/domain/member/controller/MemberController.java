@@ -5,6 +5,7 @@ import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginReques
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
+import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
 import com.example.immediatemeetupbe.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,16 @@ public class MemberController {
     public ResponseEntity<Void> deleteMember() {
         memberService.deleteMember();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberProfileResponse> retrieveMyProfile() {
+        return ResponseEntity.ok(memberService.retrieveMyProfile());
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberProfileResponse> retrieveMemberProfile(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberService.retrieveMemberProfile(memberId));
     }
 
     @PostMapping("/emails/verification-requests")

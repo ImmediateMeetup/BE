@@ -6,6 +6,7 @@ import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginReques
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
+import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import com.example.immediatemeetupbe.global.aws.S3Util;
@@ -146,5 +147,30 @@ public class MemberService {
     public void deleteMember() {
         Member member = authUtil.getLoginMember();
         memberRepository.delete(member);
+    }
+
+    public MemberProfileResponse retrieveMyProfile() {
+        Member member = authUtil.getLoginMember();
+
+        return MemberProfileResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .image(member.getProfileImage())
+                .phoneNumber(member.getPhoneNumber())
+                .address(member.getAddress())
+                .build();
+    }
+
+    public MemberProfileResponse retrieveMemberProfile(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NO_EXIST_ENTITY.getMessage()));
+
+        return MemberProfileResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .image(member.getProfileImage())
+                .phoneNumber(member.getPhoneNumber())
+                .address(member.getAddress())
+                .build();
     }
 }
