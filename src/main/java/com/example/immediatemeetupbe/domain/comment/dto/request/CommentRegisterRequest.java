@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class CommentRegisterRequest {
 
+    private Long meeting;
     private String content;
 
     public Comment toEntity(Member member, Meeting meeting) {

@@ -42,6 +42,14 @@ public class MeetingService {
     }
 
     @Transactional
+    public Meeting getMeetingInfo(Long id) {
+        if (meetingRepository.existsById(id)) {
+            throw new BaseException(NO_EXIST_MEETING.getMessage());
+        }
+        return meetingRepository.getById(id);
+    }
+
+    @Transactional
     public void delete(Long id) {
         if (meetingRepository.existsById(id)) {
             throw new BaseException(NO_EXIST_MEETING.getMessage());

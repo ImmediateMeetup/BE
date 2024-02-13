@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.meetingMember.service;
 
+import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.meetingMember.dto.request.MeetingMemberTimeRequest;
@@ -21,8 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.ERROR_GET_MEETING;
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEETING;
+import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,14 +59,6 @@ public class MeetingMemberService {
         timeTable.calculateSchedule(meetingMemberList);
 
         return MeetingMemberResponse.from(timeTable);
-    }
-
-    @Transactional
-    public Meeting getMeetingInfo(Member member) {
-        if (meetingRepository.existsByMemberId(member.getId())) {
-            throw new BaseException(ERROR_GET_MEETING.getMessage());
-        }
-        return meetingRepository.getMeetingByMemberId(member.getId());
     }
 
     private static String changeTimeToString(MeetingMemberTimeRequest meetingMemberTimeRequest) {
