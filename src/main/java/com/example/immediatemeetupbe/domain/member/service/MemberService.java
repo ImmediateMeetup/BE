@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
+import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
 import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
