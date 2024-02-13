@@ -1,6 +1,6 @@
-package com.example.immediatemeetupbe.domain.memberMeeting.dto.response;
+package com.example.immediatemeetupbe.domain.meetingMember.dto.response;
 
-import com.example.immediatemeetupbe.domain.memberMeeting.valueObject.TimeTable;
+import com.example.immediatemeetupbe.domain.meetingMember.valueObject.TimeTable;
 import lombok.Getter;
 
 @Getter

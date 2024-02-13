@@ -1,14 +1,12 @@
 package com.example.immediatemeetupbe.domain.comment.controller;
 
 import com.example.immediatemeetupbe.domain.comment.dto.request.CommentRegisterRequest;
+import com.example.immediatemeetupbe.domain.comment.dto.request.CommentReplyRequest;
+import com.example.immediatemeetupbe.domain.comment.dto.request.CommentUpdateRequest;
 import com.example.immediatemeetupbe.domain.comment.service.CommentService;
-import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,9 +15,28 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/comment")
     public ResponseEntity<Void> registerComment(@RequestBody CommentRegisterRequest commentRegisterRequest) {
-
+        commentService.registerComment(commentRegisterRequest);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/reply")
+    public ResponseEntity<Void> registerReply(@RequestBody CommentReplyRequest commentReplyRequest) {
+        commentService.registerReply(commentReplyRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping()
+    public ResponseEntity<Void> updateComment(@RequestBody CommentUpdateRequest commentUpdateRequest) {
+        commentService.update(commentUpdateRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable("id") Long id) {
+        commentService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

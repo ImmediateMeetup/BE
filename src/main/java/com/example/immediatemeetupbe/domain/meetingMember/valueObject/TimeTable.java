@@ -1,6 +1,6 @@
-package com.example.immediatemeetupbe.domain.memberMeeting.valueObject;
+package com.example.immediatemeetupbe.domain.meetingMember.valueObject;
 
-import com.example.immediatemeetupbe.domain.memberMeeting.entity.MeetingMember;
+import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
