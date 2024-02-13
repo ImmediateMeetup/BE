@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.controller;
 
+import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
@@ -26,6 +27,12 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MemberLoginRequest memberLoginRequest) {
         return ResponseEntity.ok(memberService.login(memberLoginRequest));
+    }
+
+    @PatchMapping("/edit-password")
+    public ResponseEntity<Void> editPassword(@Valid @RequestBody EditPasswordRequest editPasswordRequest) {
+        memberService.editPassword(editPasswordRequest);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/modify-user")

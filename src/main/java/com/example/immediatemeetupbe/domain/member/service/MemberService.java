@@ -1,6 +1,7 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
+import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
@@ -120,11 +121,24 @@ public class MemberService {
     }
 
     public EmailConfirmResponse verifiedCode(String email, String authCode) {
-        this.checkDuplicatedEmail(email);
+        checkDuplicatedEmail(email);
         String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
         if(redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode)) {
            return EmailConfirmResponse.from("인증 성공");
         }
         return EmailConfirmResponse.from("인증 실패");
+    }
+
+    @Transactional
+    public void editPassword(EditPasswordRequest request) {
+        if(!request.getPassword().equals(request.getCheckPassword())) {
+            throw new BaseException(BaseExceptionStatus.PASSWORD_UNCHECK.getMessage());
+        }
+
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage()));
+        String password = passwordEncoder.encode(request.getPassword());
+
+        member.editPassword(password);
     }
 }
