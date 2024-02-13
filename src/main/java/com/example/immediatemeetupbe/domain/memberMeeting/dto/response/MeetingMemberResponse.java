@@ -1,19 +1,18 @@
 package com.example.immediatemeetupbe.domain.memberMeeting.dto.response;
 
-import java.time.LocalDateTime;
-import java.util.Hashtable;
+import com.example.immediatemeetupbe.domain.memberMeeting.valueObject.TimeTable;
 import lombok.Getter;
 
 @Getter
 public class MeetingMemberResponse {
 
-    private final Hashtable<LocalDateTime, Integer> timeTable;
+    private final TimeTable timeTable;
 
-    public MeetingMemberResponse(Hashtable<LocalDateTime, Integer> timeTable) {
+    public MeetingMemberResponse(TimeTable timeTable) {
         this.timeTable = timeTable;
     }
 
-    public static MeetingMemberResponse from(Hashtable<LocalDateTime, Integer> timeTable) {
+    public static MeetingMemberResponse from(TimeTable timeTable) {
         return new MeetingMemberResponse(timeTable);
     }
 }
