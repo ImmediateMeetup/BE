@@ -6,8 +6,8 @@ import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterR
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
+import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
-import com.example.immediatemeetupbe.domain.memberMeeting.entity.MeetingMember;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.repository.MeetingRepository;
