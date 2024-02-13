@@ -65,7 +65,7 @@ public class MemberService {
     @Transactional
     public String login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NO_AUTH_MEMBER.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage()));
 
         if (!member.checkPassword(passwordEncoder, request.getPassword())) {
             throw new BaseException(BaseExceptionStatus.WRONG_PASSWORD.getMessage());
@@ -140,5 +140,11 @@ public class MemberService {
         String password = passwordEncoder.encode(request.getPassword());
 
         member.editPassword(password);
+    }
+
+    @Transactional
+    public void deleteMember() {
+        Member member = authUtil.getLoginMember();
+        memberRepository.delete(member);
     }
 }

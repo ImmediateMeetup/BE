@@ -41,6 +41,12 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember() {
+        memberService.deleteMember();
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/emails/verification-requests")
     public ResponseEntity<Void> sendMessage(@RequestParam("email") @Valid String email) {
         memberService.sendCodeToEmail(email);
