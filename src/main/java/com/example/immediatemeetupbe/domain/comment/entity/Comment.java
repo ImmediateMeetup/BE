@@ -1,13 +1,16 @@
-package com.example.immediatemeetupbe.domain.meeting.entity;
+package com.example.immediatemeetupbe.domain.comment.entity;
 
+import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
+import com.example.immediatemeetupbe.domain.member.entity.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,34 +18,29 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Meeting {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "meeting_id")
+    @Column(name = "comment_id")
     private Long id;
 
-    @Column(name = "title")
-    @NotNull
-    private String title;
-
-    @Column(name = "content")
     private String content;
 
-    @Column(name = "first_day")
-    private String firstDay;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    @Column(name = "last_day")
-    private String lastDay;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meeting_id")
+    private Meeting meeting;
 
-    @Column(name = "place")
-    private String place;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
 
-    @Column(name = "time_zone")
-    private String timeZone;
-
-    @Column(name = "status")
-    private boolean status;
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Comment> childComments = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "create_at")
@@ -52,12 +50,7 @@ public class Meeting {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-
-    public void update(String title, String content, String firstDay, String lastDay) {
-        this.title = title;
+    public void update(String content) {
         this.content = content;
-        this.firstDay = firstDay;
-        this.lastDay = lastDay;
     }
-
 }
