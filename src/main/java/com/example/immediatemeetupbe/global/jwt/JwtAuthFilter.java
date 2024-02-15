@@ -1,8 +1,6 @@
 package com.example.immediatemeetupbe.global.jwt;
 
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
-import com.example.immediatemeetupbe.repository.RefreshTokenRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

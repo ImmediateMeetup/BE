@@ -1,6 +1,5 @@
 package com.example.immediatemeetupbe.domain.meetingMember.service;
 
-import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.meetingMember.dto.request.MeetingMemberTimeRequest;
@@ -9,10 +8,9 @@ import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
 import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMemberId;
 import com.example.immediatemeetupbe.domain.meetingMember.valueObject.MeetingTime;
 import com.example.immediatemeetupbe.domain.meetingMember.valueObject.TimeTable;
-import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
-import com.example.immediatemeetupbe.repository.MeetingRepository;
-import com.example.immediatemeetupbe.repository.MeetingMemberRepository;
+import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
+import com.example.immediatemeetupbe.domain.meetingMember.repository.MeetingMemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor

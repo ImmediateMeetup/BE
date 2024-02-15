@@ -30,14 +30,24 @@ public class MeetingMember {
     @Column(name = "time_zone")
     private String timeZone;
 
+    @Column(name = "host")
+    private Boolean host;
+
+
     @Builder
-    public MeetingMember(Member member, Meeting meeting, String timeZone) {
+    public MeetingMember(Member member, Meeting meeting, String timeZone, Boolean host) {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;
+        this.host = host;
     }
 
     public void registerMemberTime(String timeZone) {
         this.timeZone = timeZone;
     }
+
+    public void revitalizeHost(Boolean host) {
+        this.host = host;
+    }
+
 }

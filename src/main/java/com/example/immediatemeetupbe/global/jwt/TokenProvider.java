@@ -2,7 +2,7 @@ package com.example.immediatemeetupbe.global.jwt;
 
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
-import com.example.immediatemeetupbe.repository.RefreshTokenRepository;
+import com.example.immediatemeetupbe.domain.member.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

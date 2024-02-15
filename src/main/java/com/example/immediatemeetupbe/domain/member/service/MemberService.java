@@ -1,6 +1,5 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
-import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
 import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
@@ -16,8 +15,8 @@ import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import com.example.immediatemeetupbe.global.mail.MailUtil;
-import com.example.immediatemeetupbe.repository.MemberRepository;
-import com.example.immediatemeetupbe.repository.RefreshTokenRepository;
+import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
+import com.example.immediatemeetupbe.domain.member.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.repository;
+package com.example.immediatemeetupbe.domain.member.repository;
 
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;

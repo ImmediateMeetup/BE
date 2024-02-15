@@ -18,13 +18,11 @@ public class MeetingMemberController {
 
     private final MeetingMemberService meetingMemberService;
 
-
     @PostMapping("/{meeting_id}")
     public ResponseEntity<MeetingMemberResponse> registerUserTime(
-        @PathVariable("meeting_id") Long meetingId,
-        @RequestBody MeetingMemberTimeRequest meetingMemberTimeRequest) {
+            @PathVariable("meeting_id") Long meetingId,
+            @RequestBody MeetingMemberTimeRequest meetingMemberTimeRequest) {
         return ResponseEntity.ok().body(
-            meetingMemberService.registerMemberTime(meetingId, meetingMemberTimeRequest));
+                meetingMemberService.registerMemberTime(meetingId, meetingMemberTimeRequest));
     }
-
 }

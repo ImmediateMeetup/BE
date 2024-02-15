@@ -3,8 +3,10 @@ package com.example.immediatemeetupbe.domain.meeting.dto.request;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class MeetingRegisterRequest {
 
