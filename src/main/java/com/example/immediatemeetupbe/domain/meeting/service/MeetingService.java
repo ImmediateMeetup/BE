@@ -10,8 +10,8 @@ import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
+import com.example.immediatemeetupbe.repository.MeetingMemberRepository;
 import com.example.immediatemeetupbe.repository.MeetingRepository;
-import com.example.immediatemeetupbe.repository.MemberMeetingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus
 public class MeetingService {
 
     private final MeetingRepository meetingRepository;
-    private final MemberMeetingRepository memberMeetingRepository;
+    private final MeetingMemberRepository meetingMemberRepository;
     private final AuthUtil authUtil;
 
     @Transactional
@@ -34,7 +34,7 @@ public class MeetingService {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
 
-        memberMeetingRepository.save(MeetingMember.builder()
+        meetingMemberRepository.save(MeetingMember.builder()
                 .meeting(meeting)
                 .member(member)
                 .build());
@@ -88,5 +88,9 @@ public class MeetingService {
         return MeetingListResponse.builder()
                 .meetings(meetingDtoList)
                 .build();
+    }
+
+    @Transactional
+    public void inviteMember(Long meetingId, Long memberId) {
     }
 }
