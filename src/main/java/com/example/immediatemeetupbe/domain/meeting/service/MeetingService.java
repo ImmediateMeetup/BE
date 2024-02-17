@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEETING;
 
@@ -31,7 +30,14 @@ public class MeetingService {
 
     @Transactional
     public void register(MeetingRegisterRequest meetingRegisterRequest) {
-        meetingRepository.save(meetingRegisterRequest.toEntity());
+        // 방을 만든 사람
+        Member member = authUtil.getLoginMember();
+        Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
+
+        memberMeetingRepository.save(MeetingMember.builder()
+                .meeting(meeting)
+                .member(member)
+                .build());
     }
 
     @Transactional
@@ -73,7 +79,7 @@ public class MeetingService {
     @Transactional(readOnly = true)
     public MeetingListResponse getAllMeetings() {
         Member member = authUtil.getLoginMember();
-        List<MeetingMember> meetingMemberList = memberMeetingRepository.findAllByMember(member);
+        List<MeetingMember> meetingMemberList = member.getMeetingMemberList();
 
         List<MeetingDto> meetingDtoList = meetingMemberList.stream()
                 .map(meetingMember -> MeetingDto.from(meetingMember.getMeeting()))
