@@ -1,7 +1,6 @@
 package com.example.immediatemeetupbe.domain.participant.dto.response;
 
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
-import com.example.immediatemeetupbe.domain.participant.vo.TimeTable;
 import lombok.Getter;
 
 @Getter

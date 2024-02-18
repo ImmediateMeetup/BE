@@ -1,6 +1,6 @@
 package com.example.immediatemeetupbe.domain.participant.dto.response;
 
-import com.example.immediatemeetupbe.domain.participant.vo.TimeTable;
+
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import lombok.Getter;
