@@ -6,12 +6,13 @@ import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterR
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
+import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
-import com.example.immediatemeetupbe.repository.MeetingRepository;
-import com.example.immediatemeetupbe.repository.ParticipantRepository;
+
+import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +36,10 @@ public class MeetingService {
         Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
 
         participantRepository.save(Participant.builder()
-            .meeting(meeting)
-            .member(member)
-            .build());
+                .meeting(meeting)
+                .member(member)
+                .host(true)
+                .build());
     }
 
     @Transactional
@@ -47,7 +49,7 @@ public class MeetingService {
         }
         Meeting meeting = meetingRepository.getById(meetingModifyRequest.getId());
         meeting.update(meetingModifyRequest.getTitle(), meetingModifyRequest.getContent(),
-            meetingModifyRequest.getFirstDay(), meetingModifyRequest.getLastDay());
+                meetingModifyRequest.getFirstDay(), meetingModifyRequest.getLastDay());
     }
 
     @Transactional
@@ -83,11 +85,11 @@ public class MeetingService {
         List<Participant> participantList = member.getParticipantList();
 
         List<MeetingDto> meetingDtoList = participantList.stream()
-            .map(meetingMember -> MeetingDto.from(meetingMember.getMeeting()))
-            .toList();
+                .map(meetingMember -> MeetingDto.from(meetingMember.getMeeting()))
+                .toList();
 
         return MeetingListResponse.builder()
-            .meetings(meetingDtoList)
-            .build();
+                .meetings(meetingDtoList)
+                .build();
     }
 }

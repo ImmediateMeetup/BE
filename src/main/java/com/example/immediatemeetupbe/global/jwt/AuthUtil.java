@@ -2,10 +2,12 @@ package com.example.immediatemeetupbe.global.jwt;
 
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.global.exception.BaseException;
-import com.example.immediatemeetupbe.repository.MemberRepository;
+import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.ERROR_GET_MEMBER;
 import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEMBER;

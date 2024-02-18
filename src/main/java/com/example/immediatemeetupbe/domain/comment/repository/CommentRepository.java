@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.repository;
+package com.example.immediatemeetupbe.domain.comment.repository;
 
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
