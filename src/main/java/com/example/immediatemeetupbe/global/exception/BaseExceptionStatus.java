@@ -31,8 +31,8 @@ public enum BaseExceptionStatus {
     // AUTH
     NO_EXIST_MEMBER("ID에 해당하는 회원을 찾을 수 없습니다. ID: "),
     ERROR_GET_MEMBER("로그인 멤버를 가져오는 중 오류가 발생했습니다."),
-   // MEETING MEMBER
-    NO_EXIST_MEETING_OR_MEMBER("약속방에 멤버가 존재하지 않습니다.");
+    // MEETING MEMBER
+    NO_EXIST_PARTICIPANT("미팅에 존재하는 참가자가 아닙니다.");
 
 
     private final String message;
