@@ -1,6 +1,6 @@
-package com.example.immediatemeetupbe.domain.meetingMember.valueObject;
+package com.example.immediatemeetupbe.domain.participant.vo;
 
-import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
+import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -30,9 +30,9 @@ public class TimeTable {
             currentDateTime = currentDateTime.plusMinutes(30);
         }
     }
-    
-    public void calculateSchedule(List<MeetingMember> meetingMemberList) {
-        meetingMemberList.forEach(meetingMember ->
+
+    public void calculateSchedule(List<Participant> participantList) {
+        participantList.forEach(meetingMember ->
             Arrays.stream(meetingMember.getTimeZone().split("/"))
                 .map(LocalDateTime::parse)
                 .forEach(timezone -> timeTable.put(timezone, timeTable.get(timezone) + 1))

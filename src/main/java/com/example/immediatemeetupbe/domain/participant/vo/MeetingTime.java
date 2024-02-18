@@ -1,10 +1,9 @@
-package com.example.immediatemeetupbe.domain.meetingMember.valueObject;
+package com.example.immediatemeetupbe.domain.participant.vo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Getter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 
