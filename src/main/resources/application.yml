@@ -57,3 +57,6 @@ cloud:
       auto: false
     stack:
       auto: false
+
+springdoc:
+  packages-to-scan: { com.example.immediatemeetupbe.domain.meeting.MeetingController }
