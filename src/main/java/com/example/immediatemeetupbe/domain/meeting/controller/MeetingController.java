@@ -2,7 +2,6 @@ package com.example.immediatemeetupbe.domain.meeting.controller;
 
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingModifyRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterRequest;
-import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.service.MeetingService;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +37,5 @@ public class MeetingController {
     public ResponseEntity<Void> deleteMeeting(@PathVariable("id") Long id) {
         meetingService.delete(id);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<MeetingListResponse> getAllMyMeetings() {
-        return ResponseEntity.ok(meetingService.getAllMeetings());
     }
 }
