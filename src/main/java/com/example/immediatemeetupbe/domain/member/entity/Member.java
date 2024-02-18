@@ -1,13 +1,13 @@
 package com.example.immediatemeetupbe.domain.member.entity;
 
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
+import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -44,6 +44,9 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Comment> commentMemberList;
 
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Participant> participantList;
+
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
@@ -52,11 +55,16 @@ public class Member {
         return passwordEncoder.matches(password, this.password);
     }
 
-    public void modify(String email, String name, String profileImage, String phoneNumber, String address) {
+    public void modify(String email, String name, String profileImage, String phoneNumber,
+        String address) {
         this.email = (email != null) ? email : this.email;
         this.name = (name != null) ? name : this.name;
         this.profileImage = profileImage;
         this.phoneNumber = (phoneNumber != null) ? phoneNumber : this.phoneNumber;
         this.address = (email != null) ? address : this.address;
+    }
+
+    public void editPassword(String password) {
+        this.password = password;
     }
 }

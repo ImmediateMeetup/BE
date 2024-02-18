@@ -1,9 +1,11 @@
 package com.example.immediatemeetupbe.domain.member.controller;
 
+import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
+import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
 import com.example.immediatemeetupbe.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
+    public ResponseEntity<Void> signUp(
+        @Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
         memberService.signUp(memberSignUpRequest);
         return ResponseEntity.ok().build();
     }
@@ -28,10 +31,34 @@ public class MemberController {
         return ResponseEntity.ok(memberService.login(memberLoginRequest));
     }
 
+    @PatchMapping("/edit-password")
+    public ResponseEntity<Void> editPassword(
+        @Valid @RequestBody EditPasswordRequest editPasswordRequest) {
+        memberService.editPassword(editPasswordRequest);
+        return ResponseEntity.ok().build();
+    }
+
     @PatchMapping("/modify-user")
     public ResponseEntity<Void> modifyProfile(MemberModifyRequest memberModifyRequest) {
         memberService.modifyProfile(memberModifyRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember() {
+        memberService.deleteMember();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberProfileResponse> retrieveMyProfile() {
+        return ResponseEntity.ok(memberService.retrieveMyProfile());
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberProfileResponse> retrieveMemberProfile(
+        @PathVariable Long memberId) {
+        return ResponseEntity.ok(memberService.retrieveMemberProfile(memberId));
     }
 
     @PostMapping("/emails/verification-requests")
@@ -41,8 +68,9 @@ public class MemberController {
     }
 
     @GetMapping("/emails/verifications")
-    public ResponseEntity<EmailConfirmResponse> verificationEmail(@RequestParam("email") @Valid String email,
-                                                                  @RequestParam("code") String authCode) {
+    public ResponseEntity<EmailConfirmResponse> verificationEmail(
+        @RequestParam("email") @Valid String email,
+        @RequestParam("code") String authCode) {
         return ResponseEntity.ok(memberService.verifiedCode(email, authCode));
     }
 }
