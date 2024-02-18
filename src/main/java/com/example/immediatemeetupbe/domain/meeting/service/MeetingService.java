@@ -6,13 +6,12 @@ import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterR
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
-import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
-import com.example.immediatemeetupbe.domain.meetingMember.service.MeetingMemberService;
+import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
-import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
-import com.example.immediatemeetupbe.domain.meetingMember.repository.MemberMeetingRepository;
+import com.example.immediatemeetupbe.repository.MeetingRepository;
+import com.example.immediatemeetupbe.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,17 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEETING;
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEMBER;
 
 @Service
 @RequiredArgsConstructor
 public class MeetingService {
 
-    private final MeetingMemberService meetingMemberService;
-
     private final MeetingRepository meetingRepository;
-    private final MemberMeetingRepository memberMeetingRepository;
-
+    private final ParticipantRepository participantRepository;
     private final AuthUtil authUtil;
 
     @Transactional
@@ -39,52 +34,60 @@ public class MeetingService {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
 
-        memberMeetingRepository.save(MeetingMember.builder()
-                .meeting(meeting)
-                .member(member)
-                .build());
+        participantRepository.save(Participant.builder()
+            .meeting(meeting)
+            .member(member)
+            .build());
     }
 
     @Transactional
     public void modify(MeetingModifyRequest meetingModifyRequest) {
-        Meeting meeting = meetingRepository.findById(meetingModifyRequest.getId())
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
-        meeting.update(meetingModifyRequest.getTitle(), meetingModifyRequest.getContent(), meetingModifyRequest.getFirstDay(), meetingModifyRequest.getLastDay());
+        if (meetingRepository.existsById(meetingModifyRequest.getId())) {
+            throw new BaseException(NO_EXIST_MEETING.getMessage());
+        }
+        Meeting meeting = meetingRepository.getById(meetingModifyRequest.getId());
+        meeting.update(meetingModifyRequest.getTitle(), meetingModifyRequest.getContent(),
+            meetingModifyRequest.getFirstDay(), meetingModifyRequest.getLastDay());
     }
 
     @Transactional
     public MeetingResponse getMeetingInfoById(Long id) {
-        Meeting meeting = meetingRepository.findById(id)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
-
+        if (meetingRepository.existsById(id)) {
+            throw new BaseException(NO_EXIST_MEETING.getMessage());
+        }
+        Meeting meeting = meetingRepository.getById(id);
         return MeetingResponse.from(meeting);
     }
 
     @Transactional
     public Meeting getMeetingInfo(Long id) {
-        return meetingRepository.findById(id)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
+        if (meetingRepository.existsById(id)) {
+            throw new BaseException(NO_EXIST_MEETING.getMessage());
+        }
+        return meetingRepository.getById(id);
     }
 
     @Transactional
     public void delete(Long id) {
-        Meeting meeting = meetingRepository.findById(id)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
+        if (meetingRepository.existsById(id)) {
+            throw new BaseException(NO_EXIST_MEETING.getMessage());
+        }
 
+        Meeting meeting = meetingRepository.getById(id);
         meetingRepository.delete(meeting);
     }
 
     @Transactional(readOnly = true)
     public MeetingListResponse getAllMeetings() {
         Member member = authUtil.getLoginMember();
-        List<MeetingMember> meetingMemberList = member.getMeetingMemberList();
+        List<Participant> participantList = member.getParticipantList();
 
-        List<MeetingDto> meetingDtoList = meetingMemberList.stream()
-                .map(meetingMember -> MeetingDto.from(meetingMember.getMeeting()))
-                .toList();
+        List<MeetingDto> meetingDtoList = participantList.stream()
+            .map(meetingMember -> MeetingDto.from(meetingMember.getMeeting()))
+            .toList();
 
         return MeetingListResponse.builder()
-                .meetings(meetingDtoList)
-                .build();
+            .meetings(meetingDtoList)
+            .build();
     }
 }
