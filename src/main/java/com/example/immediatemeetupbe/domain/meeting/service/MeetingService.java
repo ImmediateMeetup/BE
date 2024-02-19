@@ -111,6 +111,10 @@ public class MeetingService {
         Member invitedMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBER.getMessage()));
 
+        if (participantRepository.existsByMemberAndMeeting(invitedMember, meeting)) {
+            throw new BaseException(ALREADY_INVITED.getMessage());
+        }
+
         participantRepository.save(Participant.builder()
                 .meeting(meeting)
                 .member(invitedMember)

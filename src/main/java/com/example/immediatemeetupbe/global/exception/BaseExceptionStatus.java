@@ -33,7 +33,8 @@ public enum BaseExceptionStatus {
     ERROR_GET_MEMBER("로그인 멤버를 가져오는 중 오류가 발생했습니다."),
     // MEETING MEMBER
     NO_EXIST_PARTICIPANT("미팅에 존재하는 참가자가 아닙니다."),
-    NOT_HOST_OF_MEETING("약속방의 방장이 아닙니다.");
+    NOT_HOST_OF_MEETING("약속방의 방장이 아닙니다."),
+    ALREADY_INVITED("이미 초대된 회원입니다.");
 
 
     private final String message;
