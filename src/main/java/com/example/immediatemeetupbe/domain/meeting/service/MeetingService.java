@@ -7,10 +7,12 @@ import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResp
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
+import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
 import com.example.immediatemeetupbe.global.exception.BaseException;
+import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 
 import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
@@ -20,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_MEETING;
+import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class MeetingService {
 
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
+    private final MemberRepository memberRepository;
     private final AuthUtil authUtil;
 
     @Transactional
@@ -92,5 +95,27 @@ public class MeetingService {
         return MeetingListResponse.builder()
                 .meetings(meetingDtoList)
                 .build();
+    }
+
+    @Transactional
+    public void inviteMember(Long meetingId, Long memberId) {
+        Member host = authUtil.getLoginMember();
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
+        Participant participant = participantRepository.findByMemberAndMeeting(host, meeting)
+                .orElseThrow(() -> new BaseException(NO_EXIST_PARTICIPANT.getMessage()));
+
+        if (participant.getRole() != Role.HOST) {
+            throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
+        }
+
+        Member invitedMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBER.getMessage()));
+
+        participantRepository.save(Participant.builder()
+                .meeting(meeting)
+                .member(invitedMember)
+                .role(Role.MEMBER)
+                .build());
     }
 }
