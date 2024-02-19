@@ -1,8 +1,6 @@
 package com.example.immediatemeetupbe.global.jwt;
 
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
-import com.example.immediatemeetupbe.repository.RefreshTokenRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +21,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         String token = tokenProvider.resolveToken(request);
 
         if (token != null && tokenProvider.validateToken(token)) {
@@ -34,7 +33,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // 액세스 토큰이 만료되었을 때
             String email = tokenProvider.getMemberEmailFromToken(token);
             Optional<RefreshToken> refreshToken = tokenProvider.findByEmail(email);
-            if (refreshToken.isPresent() && tokenProvider.validateToken(refreshToken.get().getRefreshToken())) {
+            if (refreshToken.isPresent() && tokenProvider.validateToken(
+                refreshToken.get().getRefreshToken())) {
                 // 리프레시 토큰이 유효한 경우
                 String newAccessToken = tokenProvider.createAccessToken(email);
                 if (newAccessToken != null) {
