@@ -2,6 +2,7 @@ package com.example.immediatemeetupbe.domain.participant.entity;
 
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -27,15 +28,15 @@ public class Participant {
     @Column(name = "time_zone")
     private String timeZone;
 
-    @Column(name = "host")
-    private boolean host;
+    @Column(name = "role")
+    private Role role;
 
     @Builder
-    public Participant(Member member, Meeting meeting, String timeZone) {
+    public Participant(Member member, Meeting meeting, String timeZone, Role role) {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;
-        this.host = host;
+        this.role = role;
     }
 
     public void registerMemberTime(String timeZone) {
