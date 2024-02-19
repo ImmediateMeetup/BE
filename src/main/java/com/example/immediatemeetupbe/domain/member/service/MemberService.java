@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
+import com.example.immediatemeetupbe.domain.member.dto.MemberDto;
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
 import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
@@ -7,6 +8,7 @@ import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyReque
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
 import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
+import com.example.immediatemeetupbe.domain.member.dto.response.MemberResponse;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import com.example.immediatemeetupbe.global.aws.S3Util;
@@ -28,6 +30,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_ENTITY;
 
 @Service
 @Slf4j
@@ -163,7 +167,7 @@ public class MemberService {
 
     public MemberProfileResponse retrieveMemberProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NO_EXIST_ENTITY.getMessage()));
+                .orElseThrow(() -> new BaseException(NO_EXIST_ENTITY.getMessage()));
 
         return MemberProfileResponse.builder()
                 .email(member.getEmail())
@@ -171,6 +175,22 @@ public class MemberService {
                 .image(member.getProfileImage())
                 .phoneNumber(member.getPhoneNumber())
                 .address(member.getAddress())
+                .build();
+    }
+
+    public MemberResponse getMemberByKeyword(String keyword) {
+        List<Member> members = memberRepository.findByEmailContainingOrNameContaining(keyword, keyword);
+
+        if (members.isEmpty()) {
+            throw new BaseException(NO_EXIST_ENTITY.getMessage());
+        }
+
+        List<MemberDto> memberDtoList = members.stream()
+                .map(MemberDto::from)
+                .toList();
+
+        return MemberResponse.builder()
+                .members(memberDtoList)
                 .build();
     }
 }
