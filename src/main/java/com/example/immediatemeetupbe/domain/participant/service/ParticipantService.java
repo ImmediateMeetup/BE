@@ -40,7 +40,8 @@ public class ParticipantService {
         Meeting meeting = meetingRepository.getById(meetingId);
         Participant participant = participantTimeRequest.toEntity(member, meeting, timeZone);
         ParticipantRepository.save(participant);
-        return ParticipantResponse.from(participant);
+        return ParticipantResponse.from(participant.getMember().getId(),
+            participant.getMeeting().getId(), participant.getTimeZone());
     }
 
 
@@ -66,7 +67,8 @@ public class ParticipantService {
         String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
         Participant participant = getMeetingMember(member, meeting);
         participant.registerMemberTime(timeZone);
-        return ParticipantResponse.from(participant);
+        return ParticipantResponse.from(participant.getMember().getId(),
+            participant.getMeeting().getId(), participant.getTimeZone());
     }
 
     private static String changeTimeToString(List<LocalDateTime> memberTimeList) {
