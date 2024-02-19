@@ -1,7 +1,7 @@
 package com.example.immediatemeetupbe.global.jwt;
 
 import com.example.immediatemeetupbe.domain.member.entity.Member;
-import com.example.immediatemeetupbe.repository.MemberRepository;
+import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

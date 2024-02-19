@@ -7,10 +7,9 @@ import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.meeting.service.MeetingService;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
-import com.example.immediatemeetupbe.domain.meetingMember.service.MeetingMemberService;
 import com.example.immediatemeetupbe.global.exception.BaseException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
-import com.example.immediatemeetupbe.repository.CommentRepository;
+import com.example.immediatemeetupbe.domain.comment.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MeetingService meetingService;
-
-
     private final AuthUtil authUtil;
 
     @Transactional
@@ -41,7 +38,7 @@ public class CommentService {
         Meeting meeting = meetingService.getMeetingInfo(commentReplyRequest.getMeeting());
 
         Comment parentComment = commentRepository.findById(commentReplyRequest.getParentId())
-                .orElseThrow(() -> new BaseException(NO_EXIST_PARENT_COMMENT.getMessage()));
+            .orElseThrow(() -> new BaseException(NO_EXIST_PARENT_COMMENT.getMessage()));
 
         Comment comment = commentReplyRequest.toEntity(member, meeting, parentComment);
         parentComment.getChildComments().add(comment);
@@ -51,14 +48,14 @@ public class CommentService {
     @Transactional
     public void update(CommentUpdateRequest commentUpdateRequest) {
         Comment comment = commentRepository.findById(commentUpdateRequest.getId())
-                .orElseThrow(() -> new BaseException(NO_EXIST_COMMENT.getMessage()));
+            .orElseThrow(() -> new BaseException(NO_EXIST_COMMENT.getMessage()));
         comment.update(commentUpdateRequest.getContent());
     }
 
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new BaseException(NO_EXIST_COMMENT.getMessage()));
+            .orElseThrow(() -> new BaseException(NO_EXIST_COMMENT.getMessage()));
         commentRepository.delete(comment);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.immediatemeetupbe.domain.member.entity;
 
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
-import com.example.immediatemeetupbe.domain.meetingMember.entity.MeetingMember;
+import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,7 +45,7 @@ public class Member {
     private List<Comment> commentMemberList;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<MeetingMember> meetingMemberList;
+    private List<Participant> participantList;
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
@@ -55,7 +55,8 @@ public class Member {
         return passwordEncoder.matches(password, this.password);
     }
 
-    public void modify(String email, String name, String profileImage, String phoneNumber, String address) {
+    public void modify(String email, String name, String profileImage, String phoneNumber,
+        String address) {
         this.email = (email != null) ? email : this.email;
         this.name = (name != null) ? name : this.name;
         this.profileImage = profileImage;

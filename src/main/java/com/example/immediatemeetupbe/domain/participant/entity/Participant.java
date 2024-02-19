@@ -1,6 +1,5 @@
-package com.example.immediatemeetupbe.domain.meetingMember.entity;
+package com.example.immediatemeetupbe.domain.participant.entity;
 
-import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -8,14 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Data
 @NoArgsConstructor
-@IdClass(MeetingMemberId.class)
-@Table(name = "meeting_member")
-public class MeetingMember {
+@IdClass(ParticipantId.class)
+@Table(name = "participant")
+public class Participant {
 
     @Id
     @ManyToOne
@@ -30,11 +27,15 @@ public class MeetingMember {
     @Column(name = "time_zone")
     private String timeZone;
 
+    @Column(name = "host")
+    private boolean host;
+
     @Builder
-    public MeetingMember(Member member, Meeting meeting, String timeZone) {
+    public Participant(Member member, Meeting meeting, String timeZone) {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;
+        this.host = host;
     }
 
     public void registerMemberTime(String timeZone) {

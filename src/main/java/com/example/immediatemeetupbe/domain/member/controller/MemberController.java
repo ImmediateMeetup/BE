@@ -1,6 +1,5 @@
 package com.example.immediatemeetupbe.domain.member.controller;
 
-import com.example.immediatemeetupbe.domain.meeting.service.MeetingService;
 import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
@@ -21,7 +20,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
+    public ResponseEntity<Void> signUp(
+        @Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
         memberService.signUp(memberSignUpRequest);
         return ResponseEntity.ok().build();
     }
@@ -32,7 +32,8 @@ public class MemberController {
     }
 
     @PatchMapping("/edit-password")
-    public ResponseEntity<Void> editPassword(@Valid @RequestBody EditPasswordRequest editPasswordRequest) {
+    public ResponseEntity<Void> editPassword(
+        @Valid @RequestBody EditPasswordRequest editPasswordRequest) {
         memberService.editPassword(editPasswordRequest);
         return ResponseEntity.ok().build();
     }
@@ -55,7 +56,8 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<MemberProfileResponse> retrieveMemberProfile(@PathVariable Long memberId) {
+    public ResponseEntity<MemberProfileResponse> retrieveMemberProfile(
+        @PathVariable Long memberId) {
         return ResponseEntity.ok(memberService.retrieveMemberProfile(memberId));
     }
 
@@ -66,8 +68,9 @@ public class MemberController {
     }
 
     @GetMapping("/emails/verifications")
-    public ResponseEntity<EmailConfirmResponse> verificationEmail(@RequestParam("email") @Valid String email,
-                                                                  @RequestParam("code") String authCode) {
+    public ResponseEntity<EmailConfirmResponse> verificationEmail(
+        @RequestParam("email") @Valid String email,
+        @RequestParam("code") String authCode) {
         return ResponseEntity.ok(memberService.verifiedCode(email, authCode));
     }
 }
