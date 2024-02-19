@@ -2,7 +2,6 @@ package com.example.immediatemeetupbe.domain.participant.entity;
 
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +17,11 @@ public class Participant {
     @Id
     @ManyToOne
     @JoinColumn(name = "member_id")
-    @JsonIgnore
     private Member member;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "meeting_id")
-    @JsonIgnore
     private Meeting meeting;
 
     @Column(name = "time_zone")
@@ -34,7 +31,7 @@ public class Participant {
     private boolean host;
 
     @Builder
-    public Participant(Member member, Meeting meeting, String timeZone, boolean host) {
+    public Participant(Member member, Meeting meeting, String timeZone) {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;

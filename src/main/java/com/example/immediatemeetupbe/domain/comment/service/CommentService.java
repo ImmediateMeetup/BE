@@ -23,7 +23,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MeetingService meetingService;
-
     private final AuthUtil authUtil;
 
     @Transactional
