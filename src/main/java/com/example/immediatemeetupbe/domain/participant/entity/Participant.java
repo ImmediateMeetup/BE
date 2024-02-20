@@ -27,15 +27,15 @@ public class Participant {
     @Column(name = "time_zone")
     private String timeZone;
 
-    @Column(name = "host")
-    private boolean host;
+    @Column(name = "role")
+    private Role role;
 
     @Builder
-    public Participant(Member member, Meeting meeting, String timeZone, boolean host) {
+    public Participant(Member member, Meeting meeting, String timeZone, Role role) {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;
-        this.host = host;
+        this.role = role;
     }
 
     public void registerMemberTime(String timeZone) {

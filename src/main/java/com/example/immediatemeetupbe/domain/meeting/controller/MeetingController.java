@@ -44,4 +44,10 @@ public class MeetingController {
     public ResponseEntity<MeetingListResponse> getAllMyMeetings() {
         return ResponseEntity.ok(meetingService.getAllMeetings());
     }
+
+    @PostMapping("/invitations/{meetingId}/{memberId}")
+    public ResponseEntity<Void> inviteMember(@PathVariable Long meetingId, @PathVariable Long memberId) {
+        meetingService.inviteMember(meetingId, memberId);
+        return ResponseEntity.ok().build();
+    }
 }

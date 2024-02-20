@@ -6,6 +6,7 @@ import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyReque
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
 import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
+import com.example.immediatemeetupbe.domain.member.dto.response.MemberResponse;
 import com.example.immediatemeetupbe.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,13 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/search")
+    public ResponseEntity<MemberResponse> getMemberByKeyword(@RequestParam String keyword) {
+        return ResponseEntity.ok(memberService.getMemberByKeyword(keyword));
+    }
+
     @PostMapping
-    public ResponseEntity<Void> signUp(
-        @Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
+    public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
         memberService.signUp(memberSignUpRequest);
         return ResponseEntity.ok().build();
     }
