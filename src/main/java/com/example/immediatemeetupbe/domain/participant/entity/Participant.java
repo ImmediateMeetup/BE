@@ -2,6 +2,7 @@ package com.example.immediatemeetupbe.domain.participant.entity;
 
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
