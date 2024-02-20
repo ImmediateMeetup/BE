@@ -60,7 +60,7 @@ public class ParticipantService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public TimeTableResponse getTimeTable(Long meetingId) {
         Meeting meeting = meetingRepository.getById(meetingId);
         meetingTime.setMeetingTime(meeting.getTimeZone(), meeting.getFirstDay(),
@@ -84,6 +84,18 @@ public class ParticipantService {
         participant.registerMemberTime(timeZone);
         return ParticipantResponse.from(participant.getMember().getId(),
             participant.getMeeting().getId(), participant.getTimeZone());
+    }
+
+    @Transactional
+    public String secedeMeeting(Long meetingId) {
+        try {
+            Member member = authUtil.getLoginMember();
+            Meeting meeting = meetingRepository.getById(meetingId);
+            participantRepository.delete(getMeetingMember(member, meeting));
+            return "삭제 성공";
+        } catch (BaseException e) {
+            return e.getMessage();
+        }
     }
 
     private static String changeTimeToString(List<LocalDateTime> memberTimeList) {
