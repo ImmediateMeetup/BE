@@ -30,6 +30,7 @@ public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
     private final MemberRepository memberRepository;
+
     private final AuthUtil authUtil;
 
     @Transactional
@@ -50,7 +51,13 @@ public class MeetingService {
         if (meetingRepository.existsById(meetingModifyRequest.getId())) {
             throw new BaseException(NO_EXIST_MEETING.getMessage());
         }
+        Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingModifyRequest.getId());
+
+        if (findParticipantInfo(member, meeting).getRole() != Role.HOST) {
+            throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
+        }
+
         meeting.update(meetingModifyRequest.getTitle(), meetingModifyRequest.getContent(),
                 meetingModifyRequest.getFirstDay(), meetingModifyRequest.getLastDay());
     }
@@ -77,8 +84,13 @@ public class MeetingService {
         if (meetingRepository.existsById(id)) {
             throw new BaseException(NO_EXIST_MEETING.getMessage());
         }
-
+        Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(id);
+
+        if (findParticipantInfo(member, meeting).getRole() != Role.HOST) {
+            throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
+        }
+
         meetingRepository.delete(meeting);
     }
 
@@ -101,10 +113,8 @@ public class MeetingService {
         Member host = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
-        Participant participant = participantRepository.findByMemberAndMeeting(host, meeting)
-                .orElseThrow(() -> new BaseException(NO_EXIST_PARTICIPANT.getMessage()));
 
-        if (participant.getRole() != Role.HOST) {
+        if (findParticipantInfo(host, meeting).getRole() != Role.HOST) {
             throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
         }
 
@@ -120,5 +130,12 @@ public class MeetingService {
                 .member(invitedMember)
                 .role(Role.MEMBER)
                 .build());
+    }
+
+    @Transactional
+    public Participant findParticipantInfo(Member member, Meeting meeting) {
+        return participantRepository.findByMemberAndMeeting(member,
+                        meeting)
+                .orElseThrow(() -> new BaseException(NO_EXIST_PARTICIPANT.getMessage()));
     }
 }
