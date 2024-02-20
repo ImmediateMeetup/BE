@@ -3,6 +3,7 @@ package com.example.immediatemeetupbe.global.security;
 import com.example.immediatemeetupbe.global.jwt.JwtAuthFilter;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,19 +25,25 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws
-            Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+        HandlerMappingIntrospector introspector) throws
+        Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeHttpRequests ->
-                        authorizeHttpRequests
-                                .requestMatchers(new MvcRequestMatcher(introspector, "/api/**")).permitAll()
-                                .anyRequest().authenticated());
+            .csrf(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .addFilterBefore(new JwtAuthFilter(tokenProvider),
+                UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(sessionManagement ->
+                sessionManagement
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorizeHttpRequests ->
+                authorizeHttpRequests
+                    .requestMatchers(new MvcRequestMatcher(introspector, "/api/**")).permitAll()
+                    .requestMatchers(new MvcRequestMatcher(introspector, "/swagger-ui/**"))
+                    .permitAll()
+                    .requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**"))
+                    .permitAll()
+                    .anyRequest().authenticated());
 
         return http.build();
     }
