@@ -31,7 +31,7 @@ public class Participant {
     private boolean host;
 
     @Builder
-    public Participant(Member member, Meeting meeting, String timeZone) {
+    public Participant(Member member, Meeting meeting, String timeZone, boolean host) {
         this.member = member;
         this.meeting = meeting;
         this.timeZone = timeZone;
