@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.meeting.controller;
 
+import com.example.immediatemeetupbe.domain.meeting.dto.request.ConfirmInviteRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingModifyRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
@@ -48,6 +49,17 @@ public class MeetingController {
     @PostMapping("/invitations/{meetingId}/{memberId}")
     public ResponseEntity<Void> inviteMember(@PathVariable Long meetingId, @PathVariable Long memberId) {
         meetingService.inviteMember(meetingId, memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/invitations")
+    public ResponseEntity<MeetingListResponse> getAllInviteInfo() {
+        return ResponseEntity.ok(meetingService.getAllInviteInfo());
+    }
+
+    @PostMapping("/invitations")
+    public ResponseEntity<Void> acceptInvite(@RequestBody ConfirmInviteRequest confirmInviteRequest) {
+        meetingService.acceptInvite(confirmInviteRequest);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,15 +1,17 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
+import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -17,10 +19,11 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisService {
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Meeting> inviteRedisTemplate;
 
-    public void setValues(String key, String data) {
-        ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        values.set(key, data);
+    public void addMeetingToList(String key, Meeting data) {
+        ListOperations<String, Meeting> listOperations = inviteRedisTemplate.opsForList();
+        listOperations.rightPush(key, data);
     }
 
     public void setValues(String key, String data, Duration duration) {
@@ -35,6 +38,16 @@ public class RedisService {
             return "false";
         }
         return (String) values.get(key);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Meeting> getMeetingValues(String key) {
+        ListOperations<String, Meeting> listOperations = inviteRedisTemplate.opsForList();
+        return listOperations.range(key, 0, -1);
+    }
+
+    public void deleteMeetingValue(String key) {
+        inviteRedisTemplate.delete(key);
     }
 
     public void deleteValues(String key) {
