@@ -28,6 +28,7 @@ public class Comment {
 
     private String content;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -37,6 +38,7 @@ public class Comment {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Comment parent;

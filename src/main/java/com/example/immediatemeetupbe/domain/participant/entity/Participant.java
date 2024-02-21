@@ -3,6 +3,7 @@ package com.example.immediatemeetupbe.domain.participant.entity;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;

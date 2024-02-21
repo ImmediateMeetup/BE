@@ -6,7 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class MeetingModifyRequest {
-    private Long id;
     private String title;
     private String content;
     private String firstDay;
