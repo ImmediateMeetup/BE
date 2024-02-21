@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.domain.member.service;
+package com.example.immediatemeetupbe.global.redis;
 
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import lombok.RequiredArgsConstructor;

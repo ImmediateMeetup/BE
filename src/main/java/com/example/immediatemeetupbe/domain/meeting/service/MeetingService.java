@@ -9,7 +9,7 @@ import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
 import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
-import com.example.immediatemeetupbe.domain.member.service.RedisService;
+import com.example.immediatemeetupbe.global.redis.RedisService;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;

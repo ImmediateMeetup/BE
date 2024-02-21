@@ -19,6 +19,7 @@ import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import com.example.immediatemeetupbe.global.mail.MailUtil;
 import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 import com.example.immediatemeetupbe.domain.member.repository.RefreshTokenRepository;
+import com.example.immediatemeetupbe.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
