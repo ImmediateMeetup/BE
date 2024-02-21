@@ -10,7 +10,7 @@ import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.participant.entity.ParticipantId;
 import com.example.immediatemeetupbe.domain.participant.vo.MeetingTime;
 import com.example.immediatemeetupbe.domain.participant.vo.TimeTable;
-import com.example.immediatemeetupbe.global.exception.BaseException;
+import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
+import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class ParticipantService {
         if (participantRepository.existsByMemberAndMeeting(member, meeting)) {
             Participant existParticipant = participantRepository.findByMemberAndMeeting(member,
                     meeting)
-                .orElseThrow(() -> new BaseException(NO_EXIST_PARTICIPANT.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
             existParticipant.registerMemberTime(timeZone);
 
             return ParticipantResponse.from(existParticipant.getMember().getId(),
@@ -95,8 +95,7 @@ public class ParticipantService {
     private Participant getMeetingMember(Member member, Meeting meeting) {
         return participantRepository.findById(
                 new ParticipantId(member, meeting))
-            .orElseThrow(() -> new BaseException(
-                (NO_EXIST_PARTICIPANT.getMessage())));
+            .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 
 

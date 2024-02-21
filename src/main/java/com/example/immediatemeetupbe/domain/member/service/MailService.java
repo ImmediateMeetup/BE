@@ -1,13 +1,15 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
-import com.example.immediatemeetupbe.global.exception.BaseException;
-import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
+import com.example.immediatemeetupbe.global.exception.BusinessException;
+import com.example.immediatemeetupbe.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.immediatemeetupbe.global.exception.ErrorCode.NOT_VALIDATE_EMAIL;
 
 @Service
 @Slf4j
@@ -26,7 +28,7 @@ public class MailService {
         } catch (RuntimeException e) {
             log.debug("MailService.sendEmail exception occur toEmail: {}, " +
                     "title: {}, text: {}", toEmail, title, text);
-            throw new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage());
+            throw new BusinessException(NOT_VALIDATE_EMAIL);
         }
     }
 
