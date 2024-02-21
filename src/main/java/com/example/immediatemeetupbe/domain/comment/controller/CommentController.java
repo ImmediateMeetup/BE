@@ -27,9 +27,9 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping()
-    public ResponseEntity<Void> updateComment(@RequestBody CommentUpdateRequest commentUpdateRequest) {
-        commentService.update(commentUpdateRequest);
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateComment(@PathVariable("id") Long id, @RequestBody CommentUpdateRequest commentUpdateRequest) {
+        commentService.update(id, commentUpdateRequest);
         return ResponseEntity.ok().build();
     }
 

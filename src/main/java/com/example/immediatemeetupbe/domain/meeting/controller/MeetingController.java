@@ -23,9 +23,9 @@ public class MeetingController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping
-    public ResponseEntity<Void> modifyMeeting(@RequestBody MeetingModifyRequest meetingModifyRequest) {
-        meetingService.modify(meetingModifyRequest);
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> modifyMeeting(@PathVariable("id") Long id, @RequestBody MeetingModifyRequest meetingModifyRequest) {
+        meetingService.modify(id, meetingModifyRequest);
         return ResponseEntity.ok().build();
     }
 

@@ -38,7 +38,7 @@ public class CommentService {
         Meeting meeting = meetingService.getMeetingInfo(commentReplyRequest.getMeeting());
 
         Comment parentComment = commentRepository.findById(commentReplyRequest.getParentId())
-            .orElseThrow(() -> new BusinessException(NO_EXIST_PARENT_COMMENT));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARENT_COMMENT));
 
         Comment comment = commentReplyRequest.toEntity(member, meeting, parentComment);
         parentComment.getChildComments().add(comment);
@@ -46,16 +46,16 @@ public class CommentService {
     }
 
     @Transactional
-    public void update(CommentUpdateRequest commentUpdateRequest) {
-        Comment comment = commentRepository.findById(commentUpdateRequest.getId())
-            .orElseThrow(() -> new BusinessException(NO_EXIST_COMMENT));
+    public void update(Long id, CommentUpdateRequest commentUpdateRequest) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(NO_EXIST_COMMENT));
         comment.update(commentUpdateRequest.getContent());
     }
 
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
-            .orElseThrow(() -> new BusinessException(NO_EXIST_COMMENT));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_COMMENT));
         commentRepository.delete(comment);
     }
 }
