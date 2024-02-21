@@ -13,7 +13,6 @@ import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import com.example.immediatemeetupbe.global.aws.S3Util;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
-import com.example.immediatemeetupbe.global.exception.ErrorCode;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import com.example.immediatemeetupbe.global.mail.MailUtil;

@@ -1,7 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.service;
 
 import com.example.immediatemeetupbe.global.exception.BusinessException;
-import com.example.immediatemeetupbe.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
