@@ -1,6 +1,7 @@
 package com.example.immediatemeetupbe.domain.meeting.service;
 
 import com.example.immediatemeetupbe.domain.meeting.dto.MeetingDto;
+import com.example.immediatemeetupbe.domain.meeting.dto.request.ConfirmInviteRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingModifyRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterRequest;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
@@ -8,6 +9,7 @@ import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
 import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
+import com.example.immediatemeetupbe.domain.member.service.RedisService;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
 
@@ -27,11 +30,13 @@ import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus
 @RequiredArgsConstructor
 public class MeetingService {
 
+    private final RedisService redisService;
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
     private final MemberRepository memberRepository;
 
     private final AuthUtil authUtil;
+    private static final String AUTH_CODE_PREFIX = "AuthCode ";
 
     @Transactional
     public void register(MeetingRegisterRequest meetingRegisterRequest) {
@@ -125,11 +130,40 @@ public class MeetingService {
             throw new BaseException(ALREADY_INVITED.getMessage());
         }
 
+        redisService.addMeetingToList(AUTH_CODE_PREFIX + memberId, meeting);
+    }
+
+    @Transactional(readOnly = true)
+    public MeetingListResponse getAllInviteInfo() {
+        Member member = authUtil.getLoginMember();
+        List<Meeting> meetingList = redisService.getMeetingValues(AUTH_CODE_PREFIX + member.getId());
+
+        List<MeetingDto> meetingDtoList = meetingList.stream()
+                .map(MeetingDto::from)
+                .collect(Collectors.toList());
+
+        return MeetingListResponse.builder()
+                .meetings(meetingDtoList)
+                .build();
+    }
+
+    @Transactional
+    public void acceptInvite(ConfirmInviteRequest request) {
+        Member member = authUtil.getLoginMember();
+        Meeting meeting = meetingRepository.findById(request.getMeetingId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
+
+        if(request.getStatus() != ConfirmInviteRequest.ConfirmationStatus.ACCEPTED) {
+            redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
+            return;
+        }
+
         participantRepository.save(Participant.builder()
                 .meeting(meeting)
-                .member(invitedMember)
+                .member(member)
                 .role(Role.MEMBER)
                 .build());
+        redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
     }
 
     @Transactional
