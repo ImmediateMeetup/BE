@@ -9,11 +9,11 @@ import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
 import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
-import com.example.immediatemeetupbe.domain.member.service.RedisService;
+import com.example.immediatemeetupbe.global.redis.RedisService;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
-import com.example.immediatemeetupbe.global.exception.BaseException;
+import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 
 import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
+import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,13 +54,13 @@ public class MeetingService {
     @Transactional
     public void modify(MeetingModifyRequest meetingModifyRequest) {
         if (meetingRepository.existsById(meetingModifyRequest.getId())) {
-            throw new BaseException(NO_EXIST_MEETING.getMessage());
+            throw new BusinessException(NO_EXIST_MEETING);
         }
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingModifyRequest.getId());
 
         if (findParticipantInfo(member, meeting).getRole() != Role.HOST) {
-            throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
+            throw new BusinessException(NOT_HOST_OF_MEETING);
         }
 
         meeting.update(meetingModifyRequest.getTitle(), meetingModifyRequest.getContent(),
@@ -70,7 +70,7 @@ public class MeetingService {
     @Transactional
     public MeetingResponse getMeetingInfoById(Long id) {
         if (meetingRepository.existsById(id)) {
-            throw new BaseException(NO_EXIST_MEETING.getMessage());
+            throw new BusinessException(NO_EXIST_MEETING);
         }
         Meeting meeting = meetingRepository.getById(id);
         return MeetingResponse.from(meeting);
@@ -79,7 +79,7 @@ public class MeetingService {
     @Transactional
     public Meeting getMeetingInfo(Long id) {
         if (meetingRepository.existsById(id)) {
-            throw new BaseException(NO_EXIST_MEETING.getMessage());
+            throw new BusinessException(NO_EXIST_MEETING);
         }
         return meetingRepository.getById(id);
     }
@@ -87,13 +87,13 @@ public class MeetingService {
     @Transactional
     public void delete(Long id) {
         if (meetingRepository.existsById(id)) {
-            throw new BaseException(NO_EXIST_MEETING.getMessage());
+            throw new BusinessException(NO_EXIST_MEETING);
         }
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(id);
 
         if (findParticipantInfo(member, meeting).getRole() != Role.HOST) {
-            throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
+            throw new BusinessException(NOT_HOST_OF_MEETING);
         }
 
         meetingRepository.delete(meeting);
@@ -117,17 +117,17 @@ public class MeetingService {
     public void inviteMember(Long meetingId, Long memberId) {
         Member host = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.findById(meetingId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
 
         if (findParticipantInfo(host, meeting).getRole() != Role.HOST) {
-            throw new BaseException(NOT_HOST_OF_MEETING.getMessage());
+            throw new BusinessException(NOT_HOST_OF_MEETING);
         }
 
         Member invitedMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBER.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_MEMBER));
 
         if (participantRepository.existsByMemberAndMeeting(invitedMember, meeting)) {
-            throw new BaseException(ALREADY_INVITED.getMessage());
+            throw new BusinessException(ALREADY_INVITED);
         }
 
         redisService.addMeetingToList(AUTH_CODE_PREFIX + memberId, meeting);
@@ -151,7 +151,7 @@ public class MeetingService {
     public void acceptInvite(ConfirmInviteRequest request) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.findById(request.getMeetingId())
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEETING.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
 
         if(request.getStatus() != ConfirmInviteRequest.ConfirmationStatus.ACCEPTED) {
             redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
@@ -170,6 +170,6 @@ public class MeetingService {
     public Participant findParticipantInfo(Member member, Meeting meeting) {
         return participantRepository.findByMemberAndMeeting(member,
                         meeting)
-                .orElseThrow(() -> new BaseException(NO_EXIST_PARTICIPANT.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 }
