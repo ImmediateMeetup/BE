@@ -2,9 +2,9 @@ package com.example.immediatemeetupbe.domain.member.service;
 
 import com.example.immediatemeetupbe.domain.member.dto.MemberDto;
 import com.example.immediatemeetupbe.domain.member.dto.TokenDto;
-import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
+import com.example.immediatemeetupbe.domain.member.dto.request.PasswordEditRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
-import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
+import com.example.immediatemeetupbe.domain.member.dto.request.MemberEditRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
 import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
@@ -92,7 +92,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void modifyProfile(MemberModifyRequest request) {
+    public void editProfile(MemberEditRequest request) {
         Member member = authUtil.getLoginMember();
 
         if (request.getProfileImage() != null) {
@@ -135,7 +135,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void editPassword(EditPasswordRequest request) {
+    public void editPassword(PasswordEditRequest request) {
         if(!request.getPassword().equals(request.getCheckPassword())) {
             throw new BusinessException(PASSWORD_UNCHECK);
         }
