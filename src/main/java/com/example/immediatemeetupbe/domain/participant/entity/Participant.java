@@ -29,6 +29,7 @@ public class Participant {
     @Column(name = "time_zone")
     private String timeZone;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
 

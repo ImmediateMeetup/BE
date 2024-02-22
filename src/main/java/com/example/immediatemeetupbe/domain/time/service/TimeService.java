@@ -16,9 +16,11 @@ import com.example.immediatemeetupbe.domain.participant.vo.MeetingTime;
 import com.example.immediatemeetupbe.domain.participant.vo.TimeTable;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +39,9 @@ public class TimeService {
     public TimeResponse getMemberTime(Long meetingId) {
         Meeting meeting = meetingRepository.getById(meetingId);
         Member member = authUtil.getLoginMember();
+
         Participant participant = participantRepository.findByMemberAndMeeting(member, meeting)
-            .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
 
         return TimeResponse.from(participant.getTimeZone().split("/"));
     }
@@ -46,37 +49,41 @@ public class TimeService {
 
     @Transactional
     public ParticipantResponse updateMemberTime(Long meetingId,
-        ParticipantTimeRequest participantTimeRequest) {
+                                                ParticipantTimeRequest participantTimeRequest) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingId);
         String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
+
         Participant participant = getMeetingMember(member, meeting);
         participant.registerMemberTime(timeZone);
+
         return ParticipantResponse.from(participant.getMember().getId(),
-            participant.getMeeting().getId(), participant.getTimeZone());
+                participant.getMeeting().getId(), participant.getTimeZone());
     }
 
     private Participant getMeetingMember(Member member, Meeting meeting) {
         return participantRepository.findById(
-                new ParticipantId(member, meeting))
-            .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+                        new ParticipantId(member, meeting))
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 
 
     private static String changeTimeToString(List<LocalDateTime> memberTimeList) {
         return memberTimeList.stream()
-            .map(LocalDateTime::toString).collect(
-                Collectors.joining("/"));
+                .map(LocalDateTime::toString).collect(
+                        Collectors.joining("/"));
     }
 
     @Transactional(readOnly = true)
     public TimeTableResponse getMeetingTimeTable(Long meetingId) {
         Meeting meeting = meetingRepository.getById(meetingId);
         meetingTime.setMeetingTime(meeting.getTimeZone(), meeting.getFirstDay(),
-            meeting.getLastDay());
+                meeting.getLastDay());
+
         timeTable.setTimeTable(meetingTime.getFirstDateTime(), meetingTime.getLastDateTime());
         List<Participant> participantList = participantRepository.findAllByMeeting(
-            meeting);
+                meeting);
+
         timeTable.calculateSchedule(participantList);
 
         return TimeTableResponse.from(timeTable.getTimeTable());
