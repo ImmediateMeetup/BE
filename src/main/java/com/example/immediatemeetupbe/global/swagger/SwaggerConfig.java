@@ -16,7 +16,7 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-            .title("언제만나 Swagger")
+            .title("우리 지금 만나 당장 만나 Swagger")
             .description("Springdoc을 사용한 Swagger UI 테스트")
             .version("1.0.0");
     }
