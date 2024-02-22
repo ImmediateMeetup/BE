@@ -12,13 +12,13 @@ import com.example.immediatemeetupbe.domain.member.dto.response.MemberResponse;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.member.entity.auth.RefreshToken;
 import com.example.immediatemeetupbe.global.aws.S3Util;
-import com.example.immediatemeetupbe.global.exception.BaseException;
-import com.example.immediatemeetupbe.global.exception.BaseExceptionStatus;
+import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import com.example.immediatemeetupbe.global.mail.MailUtil;
 import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 import com.example.immediatemeetupbe.domain.member.repository.RefreshTokenRepository;
+import com.example.immediatemeetupbe.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.NO_EXIST_ENTITY;
+import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
 
 @Service
 @Slf4j
@@ -56,11 +56,11 @@ public class MemberService {
     @Transactional
     public void signUp(MemberSignUpRequest request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new BaseException(BaseExceptionStatus.EMAIL_ALREADY_EXIST.getMessage());
+            throw new BusinessException(EMAIL_ALREADY_EXIST);
         }
 
         if (!request.getPassword().equals(request.getCheckedPassword())){
-            throw new BaseException(BaseExceptionStatus.PASSWORD_UNCHECK.getMessage());
+            throw new BusinessException(PASSWORD_UNCHECK);
         }
 
         Member member = memberRepository.save(request.toEntity());
@@ -70,10 +70,10 @@ public class MemberService {
     @Transactional
     public String login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage()));
+                .orElseThrow(() -> new BusinessException(NOT_VALIDATE_EMAIL));
 
         if (!member.checkPassword(passwordEncoder, request.getPassword())) {
-            throw new BaseException(BaseExceptionStatus.WRONG_PASSWORD.getMessage());
+            throw new BusinessException(WRONG_PASSWORD);
         }
 
         List<String> roles = new ArrayList<>();
@@ -121,7 +121,7 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             log.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", email);
-            throw new BaseException(BaseExceptionStatus.EMAIL_ALREADY_EXIST.getMessage());
+            throw new BusinessException(EMAIL_ALREADY_EXIST);
         }
     }
 
@@ -137,11 +137,11 @@ public class MemberService {
     @Transactional
     public void editPassword(EditPasswordRequest request) {
         if(!request.getPassword().equals(request.getCheckPassword())) {
-            throw new BaseException(BaseExceptionStatus.PASSWORD_UNCHECK.getMessage());
+            throw new BusinessException(PASSWORD_UNCHECK);
         }
 
         Member member = memberRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BaseException(BaseExceptionStatus.NOT_VALIDATE_EMAIL.getMessage()));
+                .orElseThrow(() -> new BusinessException(NOT_VALIDATE_EMAIL));
         String password = passwordEncoder.encode(request.getPassword());
 
         member.editPassword(password);
@@ -167,7 +167,7 @@ public class MemberService {
 
     public MemberProfileResponse retrieveMemberProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_ENTITY.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_MEMBER));
 
         return MemberProfileResponse.builder()
                 .email(member.getEmail())
@@ -181,9 +181,9 @@ public class MemberService {
     public MemberResponse getMemberByKeyword(String keyword) {
         List<Member> members = memberRepository.findByEmailContainingOrNameContaining(keyword, keyword);
 
-        if (members.isEmpty()) {
-            throw new BaseException(NO_EXIST_ENTITY.getMessage());
-        }
+//        if (members.isEmpty()) {
+//            throw new BusinessException(NO_EXIST_MEMBER);
+//        }
 
         List<MemberDto> memberDtoList = members.stream()
                 .map(MemberDto::from)

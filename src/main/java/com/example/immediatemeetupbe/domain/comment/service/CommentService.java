@@ -7,7 +7,7 @@ import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.meeting.service.MeetingService;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
-import com.example.immediatemeetupbe.global.exception.BaseException;
+import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.domain.comment.repository.CommentRepository;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.immediatemeetupbe.global.exception.BaseExceptionStatus.*;
+import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class CommentService {
         Meeting meeting = meetingService.getMeetingInfo(commentReplyRequest.getMeeting());
 
         Comment parentComment = commentRepository.findById(commentReplyRequest.getParentId())
-            .orElseThrow(() -> new BaseException(NO_EXIST_PARENT_COMMENT.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARENT_COMMENT));
 
         Comment comment = commentReplyRequest.toEntity(member, meeting, parentComment);
         parentComment.getChildComments().add(comment);
@@ -46,16 +46,16 @@ public class CommentService {
     }
 
     @Transactional
-    public void update(CommentUpdateRequest commentUpdateRequest) {
-        Comment comment = commentRepository.findById(commentUpdateRequest.getId())
-            .orElseThrow(() -> new BaseException(NO_EXIST_COMMENT.getMessage()));
+    public void update(Long id, CommentUpdateRequest commentUpdateRequest) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(NO_EXIST_COMMENT));
         comment.update(commentUpdateRequest.getContent());
     }
 
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id)
-            .orElseThrow(() -> new BaseException(NO_EXIST_COMMENT.getMessage()));
+                .orElseThrow(() -> new BusinessException(NO_EXIST_COMMENT));
         commentRepository.delete(comment);
     }
 }
