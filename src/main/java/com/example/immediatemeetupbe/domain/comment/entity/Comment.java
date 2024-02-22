@@ -26,6 +26,7 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
+    @Column(name = "content")
     private String content;
 
     @JsonIgnore

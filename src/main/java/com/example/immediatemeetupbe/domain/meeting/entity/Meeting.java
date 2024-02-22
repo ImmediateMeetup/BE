@@ -1,6 +1,7 @@
 package com.example.immediatemeetupbe.domain.meeting.entity;
 
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
+import com.example.immediatemeetupbe.domain.notice.entity.Notice;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -60,6 +61,10 @@ public class Meeting implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "meeting", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "meeting", orphanRemoval = true)
+    private List<Notice> notices = new ArrayList<>();
 
 
     public void update(String title, String content, String firstDay, String lastDay) {

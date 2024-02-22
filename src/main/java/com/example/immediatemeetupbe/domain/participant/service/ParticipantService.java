@@ -33,25 +33,25 @@ public class ParticipantService {
 
     @Transactional
     public ParticipantResponse participantMeeting(Long meetingId,
-        ParticipantTimeRequest participantTimeRequest) {
+                                                  ParticipantTimeRequest participantTimeRequest) {
         String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingId);
 
         if (participantRepository.existsByMemberAndMeeting(member, meeting)) {
             Participant existParticipant = participantRepository.findByMemberAndMeeting(member,
-                    meeting)
-                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+                            meeting)
+                    .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
             existParticipant.registerMemberTime(timeZone);
 
             return ParticipantResponse.from(existParticipant.getMember().getId(),
-                existParticipant.getMeeting().getId(), existParticipant.getTimeZone());
+                    existParticipant.getMeeting().getId(), existParticipant.getTimeZone());
         }
-
         Participant participant = participantTimeRequest.toEntity(member, meeting, timeZone);
         participantRepository.save(participant);
+
         return ParticipantResponse.from(participant.getMember().getId(),
-            participant.getMeeting().getId(), participant.getTimeZone());
+                participant.getMeeting().getId(), participant.getTimeZone());
     }
 
 
@@ -59,20 +59,21 @@ public class ParticipantService {
     public String secedeMeeting(Long meetingId) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingId);
+
         participantRepository.delete(getMeetingMember(member, meeting));
         return "삭제 성공";
     }
 
     private static String changeTimeToString(List<LocalDateTime> memberTimeList) {
         return memberTimeList.stream()
-            .map(LocalDateTime::toString).collect(
-                Collectors.joining("/"));
+                .map(LocalDateTime::toString).collect(
+                        Collectors.joining("/"));
     }
 
     private Participant getMeetingMember(Member member, Meeting meeting) {
         return participantRepository.findById(
-                new ParticipantId(member, meeting))
-            .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+                        new ParticipantId(member, meeting))
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 
 
