@@ -47,7 +47,8 @@ public class Notice {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    public void update(String content) {
+    public void update(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 }
