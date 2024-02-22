@@ -139,9 +139,7 @@ public class MemberService {
         if(!request.getPassword().equals(request.getCheckPassword())) {
             throw new BusinessException(PASSWORD_UNCHECK);
         }
-
-        Member member = memberRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BusinessException(NOT_VALIDATE_EMAIL));
+        Member member = authUtil.getLoginMember();
         String password = passwordEncoder.encode(request.getPassword());
 
         member.editPassword(password);
