@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class EditPasswordRequest {
+public class PasswordEditRequest {
 
     @NotBlank(message = "필수 항목입니다.")
     private String password;

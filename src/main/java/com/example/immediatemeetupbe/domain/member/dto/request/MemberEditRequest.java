@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
-public class MemberModifyRequest {
+public class MemberEditRequest {
 
     private String email;
     private String name;

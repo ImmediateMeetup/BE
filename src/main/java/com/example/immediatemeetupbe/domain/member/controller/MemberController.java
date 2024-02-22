@@ -1,8 +1,8 @@
 package com.example.immediatemeetupbe.domain.member.controller;
 
-import com.example.immediatemeetupbe.domain.member.dto.request.EditPasswordRequest;
+import com.example.immediatemeetupbe.domain.member.dto.request.PasswordEditRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberLoginRequest;
-import com.example.immediatemeetupbe.domain.member.dto.request.MemberModifyRequest;
+import com.example.immediatemeetupbe.domain.member.dto.request.MemberEditRequest;
 import com.example.immediatemeetupbe.domain.member.dto.request.MemberSignUpRequest;
 import com.example.immediatemeetupbe.domain.member.dto.response.EmailConfirmResponse;
 import com.example.immediatemeetupbe.domain.member.dto.response.MemberProfileResponse;
@@ -36,16 +36,16 @@ public class MemberController {
         return ResponseEntity.ok(memberService.login(memberLoginRequest));
     }
 
-    @PatchMapping("/edit-password")
+    @PatchMapping("/edit/password")
     public ResponseEntity<Void> editPassword(
-        @Valid @RequestBody EditPasswordRequest editPasswordRequest) {
-        memberService.editPassword(editPasswordRequest);
+        @Valid @RequestBody PasswordEditRequest passwordEditRequest) {
+        memberService.editPassword(passwordEditRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/modify-user")
-    public ResponseEntity<Void> modifyProfile(MemberModifyRequest memberModifyRequest) {
-        memberService.modifyProfile(memberModifyRequest);
+    @PatchMapping("/edit")
+    public ResponseEntity<Void> editProfile(MemberEditRequest memberEditRequest) {
+        memberService.editProfile(memberEditRequest);
         return ResponseEntity.ok().build();
     }
 
