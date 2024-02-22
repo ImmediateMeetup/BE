@@ -1,4 +1,4 @@
-package com.example.immediatemeetupbe.domain.participant.dto.response;
+package com.example.immediatemeetupbe.domain.time.dto.response;
 
 
 import java.time.LocalDateTime;
@@ -17,4 +17,5 @@ public class TimeTableResponse {
     public static TimeTableResponse from(LinkedHashMap<LocalDateTime, Integer> timeTable) {
         return new TimeTableResponse(timeTable);
     }
+
 }
