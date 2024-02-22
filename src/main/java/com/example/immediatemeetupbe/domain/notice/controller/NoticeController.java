@@ -22,8 +22,14 @@ public class NoticeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> modifyMeeting(@PathVariable("id") Long id, @RequestBody NoticeModifyRequest noticeModifyRequest) {
+    public ResponseEntity<Void> modifyNotice(@PathVariable("id") Long id, @RequestBody NoticeModifyRequest noticeModifyRequest) {
         noticeService.modify(id, noticeModifyRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotice(@PathVariable("id") Long id) {
+        noticeService.delete(id);
         return ResponseEntity.ok().build();
     }
 

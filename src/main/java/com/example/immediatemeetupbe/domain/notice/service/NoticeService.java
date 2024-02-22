@@ -52,4 +52,17 @@ public class NoticeService {
 
         notice.update(noticeModifyRequest.getTitle(), noticeModifyRequest.getContent());
     }
+
+    @Transactional
+    public void delete(Long id) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(NO_EXIST_NOTICE));
+        Member member = authUtil.getLoginMember();
+
+        if (participantService.findParticipantInfo(member, notice.getMeeting()).getRole() != Role.HOST) {
+            throw new BusinessException(NOT_HOST_OF_MEETING);
+        }
+
+        noticeRepository.delete(notice);
+    }
 }
