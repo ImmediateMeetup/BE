@@ -5,11 +5,8 @@ import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.dto.request.ParticipantTimeRequest;
 import com.example.immediatemeetupbe.domain.participant.dto.response.ParticipantResponse;
-import com.example.immediatemeetupbe.domain.participant.dto.response.TimeTableResponse;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.participant.entity.ParticipantId;
-import com.example.immediatemeetupbe.domain.participant.vo.MeetingTime;
-import com.example.immediatemeetupbe.domain.participant.vo.TimeTable;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
@@ -32,12 +29,10 @@ public class ParticipantService {
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
     private final AuthUtil authUtil;
-    private final MeetingTime meetingTime;
-    private final TimeTable timeTable;
 
 
     @Transactional
-    public ParticipantResponse registerMemberTime(Long meetingId,
+    public ParticipantResponse participantMeeting(Long meetingId,
         ParticipantTimeRequest participantTimeRequest) {
         String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
         Member member = authUtil.getLoginMember();
@@ -61,29 +56,11 @@ public class ParticipantService {
 
 
     @Transactional
-    public TimeTableResponse getTimeTable(Long meetingId) {
-        Meeting meeting = meetingRepository.getById(meetingId);
-        meetingTime.setMeetingTime(meeting.getTimeZone(), meeting.getFirstDay(),
-            meeting.getLastDay());
-        timeTable.setTimeTable(meetingTime.getFirstDateTime(), meetingTime.getLastDateTime());
-        List<Participant> participantList = participantRepository.findAllByMeeting(
-            meeting);
-        timeTable.calculateSchedule(participantList);
-
-        return TimeTableResponse.from(timeTable.getTimeTable());
-    }
-
-
-    @Transactional
-    public ParticipantResponse updateMemberTime(Long meetingId,
-        ParticipantTimeRequest participantTimeRequest) {
+    public String secedeMeeting(Long meetingId) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingId);
-        String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
-        Participant participant = getMeetingMember(member, meeting);
-        participant.registerMemberTime(timeZone);
-        return ParticipantResponse.from(participant.getMember().getId(),
-            participant.getMeeting().getId(), participant.getTimeZone());
+        participantRepository.delete(getMeetingMember(member, meeting));
+        return "삭제 성공";
     }
 
     private static String changeTimeToString(List<LocalDateTime> memberTimeList) {
