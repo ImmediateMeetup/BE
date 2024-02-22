@@ -30,6 +30,7 @@ public class Notice {
     @Column(name = "content")
     private String content;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
