@@ -14,6 +14,7 @@ import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
 
+import com.example.immediatemeetupbe.domain.participant.service.ParticipantService;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.exception.handler.GlobalExceptionHandler;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
@@ -37,6 +38,7 @@ public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
     private final MemberRepository memberRepository;
+    private final ParticipantService participantService;
 
     private final AuthUtil authUtil;
     private static final String AUTH_CODE_PREFIX = "AuthCode ";
@@ -60,7 +62,7 @@ public class MeetingService {
                 .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
         Member member = authUtil.getLoginMember();
 
-        if (findParticipantInfo(member, meeting).getRole() != Role.HOST) {
+        if (participantService.findParticipantInfo(member, meeting).getRole() != Role.HOST) {
             throw new BusinessException(NOT_HOST_OF_MEETING);
         }
 
@@ -87,7 +89,7 @@ public class MeetingService {
                 .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
         Member member = authUtil.getLoginMember();
 
-        if (findParticipantInfo(member, meeting).getRole() != Role.HOST) {
+        if (participantService.findParticipantInfo(member, meeting).getRole() != Role.HOST) {
             throw new BusinessException(NOT_HOST_OF_MEETING);
         }
 
@@ -114,7 +116,7 @@ public class MeetingService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
 
-        if (findParticipantInfo(host, meeting).getRole() != Role.HOST) {
+        if (participantService.findParticipantInfo(host, meeting).getRole() != Role.HOST) {
             throw new BusinessException(NOT_HOST_OF_MEETING);
         }
         Member invitedMember = memberRepository.findById(memberId)
@@ -158,12 +160,5 @@ public class MeetingService {
                 .role(Role.MEMBER)
                 .build());
         redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
-    }
-
-    @Transactional
-    public Participant findParticipantInfo(Member member, Meeting meeting) {
-        return participantRepository.findByMemberAndMeeting(member,
-                        meeting)
-                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 }

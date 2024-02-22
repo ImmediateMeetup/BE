@@ -76,5 +76,10 @@ public class ParticipantService {
                 .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 
-
+    @Transactional
+    public Participant findParticipantInfo(Member member, Meeting meeting) {
+        return participantRepository.findByMemberAndMeeting(member,
+                        meeting)
+                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+    }
 }
