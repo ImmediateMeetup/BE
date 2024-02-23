@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
@@ -42,7 +43,7 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**"))
                     .permitAll()
-                    .requestMatchers(new MvcRequestMatcher(introspector,
+                    .requestMatchers(new AntPathRequestMatcher(
                         "http://ec2-43-203-196-170.ap-northeast-2.compute.amazonaws.com:8080/**"))
                     .permitAll()
                     .anyRequest().authenticated());
