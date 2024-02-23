@@ -64,6 +64,7 @@ public class MemberService {
             throw new BusinessException(PASSWORD_UNCHECK);
         }
 
+        // 테스트를 위해 임시 주석처리
 //        if (!Objects.equals(redisService.getCertifiedValues(AUTH_CODE_PREFIX + request.getEmail()), "true")) {
 //            throw new BusinessException(NOT_CERTIFIED_EMAIL);
 //        }
