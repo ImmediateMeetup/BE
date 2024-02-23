@@ -18,8 +18,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class RedisService {
+
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, Meeting> inviteRedisTemplate;
+    private final RedisTemplate<String, Object> verifiedRedisTemplate;
 
     public void addMeetingToList(String key, Meeting data) {
         ListOperations<String, Meeting> listOperations = inviteRedisTemplate.opsForList();
@@ -29,6 +31,11 @@ public class RedisService {
     public void setValues(String key, String data, Duration duration) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(key, data, duration);
+    }
+
+    public void setValues(String key, String data) {
+        ValueOperations<String, Object> values = verifiedRedisTemplate.opsForValue();
+        values.set(key, data);
     }
 
     @Transactional(readOnly = true)
@@ -46,6 +53,15 @@ public class RedisService {
         return listOperations.range(key, 0, -1);
     }
 
+    @Transactional(readOnly = true)
+    public String getCertifiedValues(String key) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        if (values.get(key) == null) {
+            return "false";
+        }
+        return (String) values.get(key);
+    }
+
     public void deleteMeetingValue(String key) {
         inviteRedisTemplate.delete(key);
     }
@@ -54,25 +70,9 @@ public class RedisService {
         redisTemplate.delete(key);
     }
 
-    public void expireValues(String key, int timeout) {
-        redisTemplate.expire(key, timeout, TimeUnit.MILLISECONDS);
-    }
-
-    public void setHashOps(String key, Map<String, String> data) {
-        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-        values.putAll(key, data);
-    }
-
-    @Transactional(readOnly = true)
-    public String getHashOps(String key, String hashKey) {
-        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-        return Boolean.TRUE.equals(values.hasKey(key, hashKey)) ? (String) redisTemplate.opsForHash().get(key, hashKey) : "";
-    }
-
-    public void deleteHashOps(String key, String hashKey) {
-        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-        values.delete(key, hashKey);
-    }
+   public void deleteCertifiedValue(String key) {
+        verifiedRedisTemplate.delete(key);
+   }
 
     public boolean checkExistsValue(String value) {
         return !value.equals("false");
