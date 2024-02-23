@@ -13,8 +13,8 @@ public enum ErrorCode {
 
     // AUTH
     NO_AUTH_MEMBER(HttpStatus.UNAUTHORIZED, "A-001", "권한이 없습니다."),
-    //    NO_EXIST_MEMBER(HttpStatus.NOT_FOUND, "A-002","ID에 해당하는 회원을 찾을 수 없습니다. ID: "),
     ERROR_GET_MEMBER(HttpStatus.UNAUTHORIZED, "A-002", "로그인 멤버를 가져오는 중 오류가 발생했습니다."),
+    NOT_CERTIFIED_EMAIL(HttpStatus.UNAUTHORIZED, "A-003", "이메일 인증을 해주세요."),
 
     // MEMBER
     NO_EXIST_MEMBER(HttpStatus.NOT_FOUND, "U-001", "존재하지 않는 회원입니다."),

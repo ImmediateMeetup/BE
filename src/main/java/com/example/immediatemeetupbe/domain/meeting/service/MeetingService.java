@@ -12,11 +12,11 @@ import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
+import com.example.immediatemeetupbe.domain.participant.entity.ParticipantId;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
 
 import com.example.immediatemeetupbe.domain.participant.service.ParticipantService;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
-import com.example.immediatemeetupbe.global.exception.handler.GlobalExceptionHandler;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 
 import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
@@ -48,6 +48,7 @@ public class MeetingService {
         // 방을 만든 사람
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
+        meeting.revitalizeStatus();
 
         participantRepository.save(Participant.builder()
                 .meeting(meeting)
@@ -74,6 +75,9 @@ public class MeetingService {
     public MeetingResponse getMeetingInfoById(Long id) {
         Meeting meeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
+
+        meeting.getComments().removeIf(comment -> comment.getParent() != null);
+
         return MeetingResponse.from(meeting);
     }
 
@@ -160,5 +164,14 @@ public class MeetingService {
                 .role(Role.MEMBER)
                 .build());
         redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
+    }
+
+    public void exitMeeting(Long meetingId) {
+        Member member = authUtil.getLoginMember();
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
+
+        ParticipantId id = new ParticipantId(member, meeting);
+        participantRepository.deleteById(id);
     }
 }

@@ -62,4 +62,10 @@ public class MeetingController {
         meetingService.acceptInvite(confirmInviteRequest);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/exit/{meetingId}")
+    public ResponseEntity<Void> exitMeeting(@PathVariable Long meetingId) {
+        meetingService.exitMeeting(meetingId);
+        return ResponseEntity.ok().build();
+    }
 }

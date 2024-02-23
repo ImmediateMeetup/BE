@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
@@ -55,13 +56,19 @@ public class MemberService {
 
     @Transactional
     public void signUp(MemberSignUpRequest request) {
-        if (memberRepository.findByEmail(request.getEmail()).isPresent()){
+        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new BusinessException(EMAIL_ALREADY_EXIST);
         }
 
-        if (!request.getPassword().equals(request.getCheckedPassword())){
+        if (!request.getPassword().equals(request.getCheckedPassword())) {
             throw new BusinessException(PASSWORD_UNCHECK);
         }
+
+        // 테스트를 위해 임시 주석처리
+//        if (!Objects.equals(redisService.getCertifiedValues(AUTH_CODE_PREFIX + request.getEmail()), "true")) {
+//            throw new BusinessException(NOT_CERTIFIED_EMAIL);
+//        }
+//        redisService.deleteCertifiedValue(AUTH_CODE_PREFIX + request.getEmail());
 
         Member member = memberRepository.save(request.toEntity());
         member.encodePassword(passwordEncoder);
@@ -70,7 +77,7 @@ public class MemberService {
     @Transactional
     public String login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BusinessException(NOT_VALIDATE_EMAIL));
+            .orElseThrow(() -> new BusinessException(NOT_VALIDATE_EMAIL));
 
         if (!member.checkPassword(passwordEncoder, request.getPassword())) {
             throw new BusinessException(WRONG_PASSWORD);
@@ -81,7 +88,7 @@ public class MemberService {
 
         TokenDto token = tokenProvider.createAllToken(member.getEmail(), roles);
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByEmail(member.getEmail());
-        if(refreshToken.isPresent()) {
+        if (refreshToken.isPresent()) {
             refreshTokenRepository.save(refreshToken.get().updateToken(token.getRefreshToken()));
         } else {
             RefreshToken newToken = new RefreshToken(token.getRefreshToken(), request.getEmail());
@@ -98,13 +105,13 @@ public class MemberService {
         if (request.getProfileImage() != null) {
             String profileImage = s3Util.uploadFile(request.getProfileImage());
             member.modify(request.getEmail(), request.getName(), profileImage,
-                    request.getPhoneNumber(), request.getAddress());
+                request.getPhoneNumber(), request.getAddress());
             return;
         }
 
         member.modify(request.getEmail(), request.getName(),
-                member.getProfileImage(), request.getPhoneNumber(),
-                request.getAddress());
+            member.getProfileImage(), request.getPhoneNumber(),
+            request.getAddress());
     }
 
     public void sendCodeToEmail(String toEmail) {
@@ -114,7 +121,7 @@ public class MemberService {
         mailService.sendEmail(toEmail, title, authCode);
         // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
         redisService.setValues(AUTH_CODE_PREFIX + toEmail,
-                authCode, Duration.ofMillis(this.authCodeExpirationMillis));
+            authCode, Duration.ofMillis(this.authCodeExpirationMillis));
     }
 
     private void checkDuplicatedEmail(String email) {
@@ -128,15 +135,18 @@ public class MemberService {
     public EmailConfirmResponse verifiedCode(String email, String authCode) {
         checkDuplicatedEmail(email);
         String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
-        if(redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode)) {
-           return EmailConfirmResponse.from("인증 성공");
+
+        if (redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode)) {
+            redisService.deleteValues(AUTH_CODE_PREFIX + email);
+            redisService.setValues(AUTH_CODE_PREFIX + email, "true");
+            return EmailConfirmResponse.from("인증 성공");
         }
         return EmailConfirmResponse.from("인증 실패");
     }
 
     @Transactional
     public void editPassword(PasswordEditRequest request) {
-        if(!request.getPassword().equals(request.getCheckPassword())) {
+        if (!request.getPassword().equals(request.getCheckPassword())) {
             throw new BusinessException(PASSWORD_UNCHECK);
         }
         Member member = authUtil.getLoginMember();
@@ -155,40 +165,41 @@ public class MemberService {
         Member member = authUtil.getLoginMember();
 
         return MemberProfileResponse.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .image(member.getProfileImage())
-                .phoneNumber(member.getPhoneNumber())
-                .address(member.getAddress())
-                .build();
+            .email(member.getEmail())
+            .name(member.getName())
+            .image(member.getProfileImage())
+            .phoneNumber(member.getPhoneNumber())
+            .address(member.getAddress())
+            .build();
     }
 
     public MemberProfileResponse retrieveMemberProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessException(NO_EXIST_MEMBER));
+            .orElseThrow(() -> new BusinessException(NO_EXIST_MEMBER));
 
         return MemberProfileResponse.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .image(member.getProfileImage())
-                .phoneNumber(member.getPhoneNumber())
-                .address(member.getAddress())
-                .build();
+            .email(member.getEmail())
+            .name(member.getName())
+            .image(member.getProfileImage())
+            .phoneNumber(member.getPhoneNumber())
+            .address(member.getAddress())
+            .build();
     }
 
     public MemberResponse getMemberByKeyword(String keyword) {
-        List<Member> members = memberRepository.findByEmailContainingOrNameContaining(keyword, keyword);
+        List<Member> members = memberRepository.findByEmailContainingOrNameContaining(keyword,
+            keyword);
 
 //        if (members.isEmpty()) {
 //            throw new BusinessException(NO_EXIST_MEMBER);
 //        }
 
         List<MemberDto> memberDtoList = members.stream()
-                .map(MemberDto::from)
-                .toList();
+            .map(MemberDto::from)
+            .toList();
 
         return MemberResponse.builder()
-                .members(memberDtoList)
-                .build();
+            .members(memberDtoList)
+            .build();
     }
 }
