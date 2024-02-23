@@ -75,6 +75,9 @@ public class MeetingService {
     public MeetingResponse getMeetingInfoById(Long id) {
         Meeting meeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
+
+        meeting.getComments().removeIf(comment -> comment.getParent() != null);
+
         return MeetingResponse.from(meeting);
     }
 
