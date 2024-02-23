@@ -64,13 +64,13 @@ public class MemberService {
             throw new BusinessException(PASSWORD_UNCHECK);
         }
 
-        if (!Objects.equals(redisService.getCertifiedValues(AUTH_CODE_PREFIX + request.getEmail()), "true")) {
-            throw new BusinessException(NOT_CERTIFIED_EMAIL);
-        }
+//        if (!Objects.equals(redisService.getCertifiedValues(AUTH_CODE_PREFIX + request.getEmail()), "true")) {
+//            throw new BusinessException(NOT_CERTIFIED_EMAIL);
+//        }
+//        redisService.deleteCertifiedValue(AUTH_CODE_PREFIX + request.getEmail());
 
         Member member = memberRepository.save(request.toEntity());
         member.encodePassword(passwordEncoder);
-        redisService.deleteCertifiedValue(AUTH_CODE_PREFIX + request.getEmail());
     }
 
     @Transactional
