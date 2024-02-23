@@ -48,6 +48,7 @@ public class MeetingService {
         // 방을 만든 사람
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
+        meeting.revitalizeStatus();
 
         participantRepository.save(Participant.builder()
                 .meeting(meeting)
