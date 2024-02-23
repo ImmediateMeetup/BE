@@ -5,8 +5,12 @@ import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -14,6 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
@@ -40,6 +45,14 @@ public class Member {
     private String profileImage;
 
     private Authority authority;
+
+    @CreatedDate
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
+
+    @LastModifiedDate
+    @Column(name = "update_at")
+    private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Comment> commentMemberList;

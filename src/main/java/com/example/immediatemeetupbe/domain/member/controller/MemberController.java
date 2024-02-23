@@ -38,7 +38,7 @@ public class MemberController {
 
     @PatchMapping("/edit/password")
     public ResponseEntity<Void> editPassword(
-        @Valid @RequestBody PasswordEditRequest passwordEditRequest) {
+            @Valid @RequestBody PasswordEditRequest passwordEditRequest) {
         memberService.editPassword(passwordEditRequest);
         return ResponseEntity.ok().build();
     }
@@ -62,7 +62,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberProfileResponse> retrieveMemberProfile(
-        @PathVariable Long memberId) {
+            @PathVariable Long memberId) {
         return ResponseEntity.ok(memberService.retrieveMemberProfile(memberId));
     }
 
@@ -74,8 +74,8 @@ public class MemberController {
 
     @GetMapping("/emails/verifications")
     public ResponseEntity<EmailConfirmResponse> verificationEmail(
-        @RequestParam("email") @Valid String email,
-        @RequestParam("code") String authCode) {
+            @RequestParam("email") @Valid String email,
+            @RequestParam("code") String authCode) {
         return ResponseEntity.ok(memberService.verifiedCode(email, authCode));
     }
 }
