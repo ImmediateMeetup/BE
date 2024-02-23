@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
@@ -62,6 +63,12 @@ public class MemberService {
         if (!request.getPassword().equals(request.getCheckedPassword())){
             throw new BusinessException(PASSWORD_UNCHECK);
         }
+
+        // 테스트를 위해 임시 주석처리
+//        if (!Objects.equals(redisService.getCertifiedValues(AUTH_CODE_PREFIX + request.getEmail()), "true")) {
+//            throw new BusinessException(NOT_CERTIFIED_EMAIL);
+//        }
+//        redisService.deleteCertifiedValue(AUTH_CODE_PREFIX + request.getEmail());
 
         Member member = memberRepository.save(request.toEntity());
         member.encodePassword(passwordEncoder);
@@ -128,7 +135,10 @@ public class MemberService {
     public EmailConfirmResponse verifiedCode(String email, String authCode) {
         checkDuplicatedEmail(email);
         String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
+
         if(redisService.checkExistsValue(redisAuthCode) && redisAuthCode.equals(authCode)) {
+            redisService.deleteValues(AUTH_CODE_PREFIX + email);
+            redisService.setValues(AUTH_CODE_PREFIX + email, "true");
            return EmailConfirmResponse.from("인증 성공");
         }
         return EmailConfirmResponse.from("인증 실패");

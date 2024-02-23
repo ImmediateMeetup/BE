@@ -74,4 +74,8 @@ public class Meeting implements Serializable {
         this.lastDay = lastDay;
     }
 
+    public void revitalizeStatus() {
+        this.status = true;
+    }
+
 }
