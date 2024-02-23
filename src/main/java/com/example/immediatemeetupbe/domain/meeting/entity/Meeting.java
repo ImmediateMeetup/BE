@@ -2,10 +2,13 @@ package com.example.immediatemeetupbe.domain.meeting.entity;
 
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.notice.entity.Notice;
+import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -66,6 +69,10 @@ public class Meeting implements Serializable {
     @OneToMany(mappedBy = "meeting", orphanRemoval = true)
     private List<Notice> notices = new ArrayList<>();
 
+    @OneToMany(mappedBy = "meeting")
+    @JsonIgnore
+    @Cascade(CascadeType.ALL)
+    private List<Participant> participantList = new ArrayList<>();
 
     public void update(String title, String content, String firstDay, String lastDay) {
         this.title = title;

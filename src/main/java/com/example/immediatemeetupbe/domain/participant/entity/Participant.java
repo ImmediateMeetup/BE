@@ -1,5 +1,7 @@
 package com.example.immediatemeetupbe.domain.participant.entity;
 
+import com.example.immediatemeetupbe.domain.map.vo.Latitude;
+import com.example.immediatemeetupbe.domain.map.vo.Longitude;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
@@ -33,6 +35,12 @@ public class Participant {
     @Column(name = "role")
     private Role role;
 
+    @Column(name = "latitude")
+    private Long latitude;
+
+    @Column(name = "longitude")
+    private Long longitude;
+
     @Builder
     public Participant(Member member, Meeting meeting, String timeZone, Role role) {
         this.member = member;
@@ -43,5 +51,10 @@ public class Participant {
 
     public void registerMemberTime(String timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public void registerLocation(Latitude latitude, Longitude longitude) {
+        this.latitude = latitude.getLatitude();
+        this.longitude = longitude.getLongitude();
     }
 }
