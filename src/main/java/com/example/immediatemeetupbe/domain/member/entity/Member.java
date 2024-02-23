@@ -5,6 +5,8 @@ import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -58,6 +60,7 @@ public class Member {
     private List<Comment> commentMemberList;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
+    @Cascade(CascadeType.ALL)
     private List<Participant> participantList;
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
