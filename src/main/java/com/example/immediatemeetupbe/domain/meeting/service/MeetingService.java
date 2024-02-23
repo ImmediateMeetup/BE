@@ -17,7 +17,6 @@ import com.example.immediatemeetupbe.domain.participant.entity.host.Role;
 
 import com.example.immediatemeetupbe.domain.participant.service.ParticipantService;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
-import com.example.immediatemeetupbe.global.exception.handler.GlobalExceptionHandler;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
 
 import com.example.immediatemeetupbe.domain.participant.repository.ParticipantRepository;
