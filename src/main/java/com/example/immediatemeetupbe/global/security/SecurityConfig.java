@@ -3,7 +3,6 @@ package com.example.immediatemeetupbe.global.security;
 import com.example.immediatemeetupbe.global.jwt.JwtAuthFilter;
 import com.example.immediatemeetupbe.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,6 +41,9 @@ public class SecurityConfig {
                     .requestMatchers(new MvcRequestMatcher(introspector, "/swagger-ui/**"))
                     .permitAll()
                     .requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**"))
+                    .permitAll()
+                    .requestMatchers(new MvcRequestMatcher(introspector,
+                        "http://ec2-43-203-196-170.ap-northeast-2.compute.amazonaws.com:8080/**"))
                     .permitAll()
                     .anyRequest().authenticated());
 
