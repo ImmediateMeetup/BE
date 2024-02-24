@@ -9,7 +9,6 @@ import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.participant.service.ParticipantService;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +36,7 @@ public class MapService {
                 participant.getLongitude()).build();
     }
 
+    @Transactional
     public MapResponse modifyUserLocation(Long meetingId, MapRegisterRequest mapRegisterRequest) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingService.getMeetingInfo(meetingId);
@@ -49,14 +49,16 @@ public class MapService {
                 participant.getLongitude()).build();
     }
 
-//    public MapResponse getCalculatePoint(Long meetingId) {
-//        List<Participant> participantList = participantService.getAllParticipantByMeetingId(
-//            meetingId);
-//        ArrayList<Point> arrays = graham.calculate(participantList);
-//        Point point = calculateMiddlePoint(arrays);
-//    }
+    public MapResponse getCalculatePoint(Long meetingId) {
+        List<Participant> participantList = participantService.getAllParticipantByMeetingId(
+            meetingId);
+        List<Point> arrays = graham.calculate(participantList);
+        Point point = calculateMiddlePoint(arrays);
+        return MapResponse.builder().meetingId(meetingId).longitude(point.getY())
+            .latitude(point.getX()).build();
+    }
 
-    private Point calculateMiddlePoint(ArrayList<Point> arrays) {
+    private Point calculateMiddlePoint(List<Point> arrays) {
         long sumX = 0;
         long sumY = 0;
         for (Point point : arrays) {

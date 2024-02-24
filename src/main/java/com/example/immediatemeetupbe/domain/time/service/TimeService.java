@@ -41,7 +41,7 @@ public class TimeService {
         Member member = authUtil.getLoginMember();
 
         Participant participant = participantRepository.findByMemberAndMeeting(member, meeting)
-                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+            .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
 
         return TimeResponse.from(participant.getTimeZone().split("/"));
     }
@@ -49,7 +49,7 @@ public class TimeService {
 
     @Transactional
     public ParticipantResponse updateMemberTime(Long meetingId,
-                                                ParticipantTimeRequest participantTimeRequest) {
+        ParticipantTimeRequest participantTimeRequest) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.getById(meetingId);
         String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
@@ -58,31 +58,31 @@ public class TimeService {
         participant.registerMemberTime(timeZone);
 
         return ParticipantResponse.from(participant.getMember().getId(),
-                participant.getMeeting().getId(), participant.getTimeZone());
+            participant.getMeeting().getId(), participant.getTimeZone());
     }
 
     private Participant getMeetingMember(Member member, Meeting meeting) {
         return participantRepository.findById(
-                        new ParticipantId(member, meeting))
-                .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
+                new ParticipantId(member, meeting))
+            .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
 
 
     private static String changeTimeToString(List<LocalDateTime> memberTimeList) {
         return memberTimeList.stream()
-                .map(LocalDateTime::toString).collect(
-                        Collectors.joining("/"));
+            .map(LocalDateTime::toString).collect(
+                Collectors.joining("/"));
     }
 
     @Transactional(readOnly = true)
     public TimeTableResponse getMeetingTimeTable(Long meetingId) {
         Meeting meeting = meetingRepository.getById(meetingId);
         meetingTime.setMeetingTime(meeting.getTimeZone(), meeting.getFirstDay(),
-                meeting.getLastDay());
-
-        timeTable.setTimeTable(meetingTime.getFirstDateTime(), meetingTime.getLastDateTime());
+            meeting.getLastDay());
+        timeTable.setTimeTable(meetingTime.getFirstDateTime(), meetingTime.getLastDateTime(),
+            meetingTime.getFirstTime(), meetingTime.getLastTime());
         List<Participant> participantList = participantRepository.findAllByMeeting(
-                meeting);
+            meeting);
 
         timeTable.calculateSchedule(participantList);
 
