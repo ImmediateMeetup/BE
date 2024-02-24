@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("http://localhost:8080/api/meet-up/map")
+@RequestMapping("/api/meet-up/map")
 public class MapController {
 
     private final MapService mapService;
@@ -36,11 +36,11 @@ public class MapController {
             .body(mapService.modifyUserLocation(meeting_id, mapRegisterRequest));
     }
 
-//    @GetMapping("/point/{meeting_id}")
-//    public ResponseEntity<MapResponse> getCalculatePoint(
-//        @PathVariable("meeting_id") Long meeting_id) {
-//        return ResponseEntity.ok()
-//            .body(mapService.getCalculatePoint(meeting_id));
-//    }
+    @GetMapping("/point/{meeting_id}")
+    public ResponseEntity<MapResponse> getCalculatePoint(
+        @PathVariable("meeting_id") Long meeting_id) {
+        return ResponseEntity.ok()
+            .body(mapService.getCalculatePoint(meeting_id));
+    }
 
 }

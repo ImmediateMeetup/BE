@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class MapRegisterRequest {
-    
-    private Longitude longitude;
-    private Latitude latitude;
+
+    private Long longitude;
+    private Long latitude;
 
 }
