@@ -2,6 +2,7 @@ package com.example.immediatemeetupbe.domain.participant.vo;
 
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class TimeTable {
 
     private final LinkedHashMap<LocalDateTime, Integer> timeTable;
+
     private LocalDateTime currentDateTime;
     private LocalDateTime lastDateTime;
 
@@ -21,12 +23,18 @@ public class TimeTable {
     }
 
 
-    public void setTimeTable(LocalDateTime firstDateTime, LocalDateTime lastDateTime) {
+    public void setTimeTable(LocalDateTime firstDateTime, LocalDateTime lastDateTime,
+        LocalTime firstTime, LocalTime lastTime) {
         this.currentDateTime = firstDateTime;
         this.lastDateTime = lastDateTime;
         while (currentDateTime.isBefore(lastDateTime) || currentDateTime.isEqual(
             lastDateTime)) {
-            timeTable.put(currentDateTime, 0);
+            if (currentDateTime.toLocalTime().equals(firstTime) || currentDateTime.toLocalTime()
+                .equals(lastTime)
+                || currentDateTime.toLocalTime().isAfter(firstTime) && currentDateTime.toLocalTime()
+                .isBefore(lastTime)) {
+                timeTable.put(currentDateTime, 0);
+            }
             currentDateTime = currentDateTime.plusMinutes(30);
         }
     }
@@ -38,4 +46,5 @@ public class TimeTable {
                 .forEach(timezone -> timeTable.put(timezone, timeTable.get(timezone) + 1))
         );
     }
+
 }
