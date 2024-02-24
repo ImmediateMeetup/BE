@@ -18,8 +18,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class RedisService {
+
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, Meeting> inviteRedisTemplate;
+    private final RedisTemplate<String, Object> verifiedRedisTemplate;
 
     public void addMeetingToList(String key, Meeting data) {
         ListOperations<String, Meeting> listOperations = inviteRedisTemplate.opsForList();
@@ -29,6 +31,11 @@ public class RedisService {
     public void setValues(String key, String data, Duration duration) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(key, data, duration);
+    }
+
+    public void setValues(String key, String data) {
+        ValueOperations<String, Object> values = verifiedRedisTemplate.opsForValue();
+        values.set(key, data);
     }
 
     @Transactional(readOnly = true)
