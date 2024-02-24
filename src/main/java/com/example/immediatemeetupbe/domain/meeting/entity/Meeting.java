@@ -51,7 +51,7 @@ public class Meeting implements Serializable {
     private String timeZone;
 
     @Column(name = "status")
-    private boolean status;
+    private Status status;
 
     @CreatedDate
     @Column(name = "create_at")
@@ -81,8 +81,7 @@ public class Meeting implements Serializable {
         this.lastDay = lastDay;
     }
 
-    public void revitalizeStatus() {
-        this.status = true;
+    public void controlStatus(Status status) {
+        this.status = status;
     }
-
 }

@@ -7,6 +7,7 @@ import com.example.immediatemeetupbe.domain.meeting.dto.request.MeetingRegisterR
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingListResponse;
 import com.example.immediatemeetupbe.domain.meeting.dto.response.MeetingResponse;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
+import com.example.immediatemeetupbe.domain.meeting.entity.Status;
 import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
 import com.example.immediatemeetupbe.domain.member.repository.MemberRepository;
 
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,7 @@ public class MeetingService {
         // 방을 만든 사람
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.save(meetingRegisterRequest.toEntity());
-        meeting.revitalizeStatus();
+        meeting.controlStatus(Status.ACTIVATION);
 
         participantRepository.save(Participant.builder()
                 .meeting(meeting)
@@ -77,6 +79,8 @@ public class MeetingService {
                 .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
 
         meeting.getComments().removeIf(comment -> comment.getParent() != null);
+
+//        if(meeting.get)
 
         return MeetingResponse.from(meeting);
     }
@@ -164,6 +168,11 @@ public class MeetingService {
                 .role(Role.MEMBER)
                 .build());
         redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
+    }
+
+    @Transactional
+    public List<Meeting> findMeetingToDisable(LocalDate specificDate) {
+        return meetingRepository.findByLastDay(specificDate.toString());
     }
 
     public void exitMeeting(Long meetingId) {
