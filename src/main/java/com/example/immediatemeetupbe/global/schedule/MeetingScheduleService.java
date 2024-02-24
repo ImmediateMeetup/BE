@@ -19,7 +19,7 @@ public class MeetingScheduleService {
     private final MeetingRepository meetingRepository;
 
     @Transactional
-    @Scheduled(cron = "0 59 23 * * ?") // 매일 자정에 실행
+    @Scheduled(cron = "0 59 23 * * ?")
     public void disableMeetingsAtSpecificDate() {
         LocalDate specificDate = LocalDate.now();
         List<Meeting> meetingsToDisable = meetingRepository.findByLastDay(specificDate.toString());
