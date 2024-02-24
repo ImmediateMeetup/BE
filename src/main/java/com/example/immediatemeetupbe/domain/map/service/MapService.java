@@ -9,7 +9,6 @@ import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.participant.service.ParticipantService;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
