@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.meeting.entity;
 
+import com.example.immediatemeetupbe.domain.BaseTimeEntity;
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.notice.entity.Notice;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
@@ -23,8 +24,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Meeting implements Serializable {
+public class Meeting extends BaseTimeEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,14 +52,6 @@ public class Meeting implements Serializable {
 
     @Column(name = "status")
     private Status status;
-
-    @CreatedDate
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "update_at")
-    private LocalDateTime updateAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "meeting", orphanRemoval = true)

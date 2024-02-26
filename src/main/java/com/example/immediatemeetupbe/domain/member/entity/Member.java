@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.member.entity;
 
+import com.example.immediatemeetupbe.domain.BaseTimeEntity;
 import com.example.immediatemeetupbe.domain.comment.entity.Comment;
 import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.member.entity.auth.Authority;
@@ -20,8 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,14 +48,6 @@ public class Member {
 
     private Authority authority;
 
-    @CreatedDate
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "update_at")
-    private LocalDateTime updateAt;
-
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Comment> commentMemberList;
 
@@ -72,7 +64,7 @@ public class Member {
     }
 
     public void modify(String email, String name, String profileImage, String phoneNumber,
-        String address) {
+                       String address) {
         this.email = (email != null) ? email : this.email;
         this.name = (name != null) ? name : this.name;
         this.profileImage = profileImage;
