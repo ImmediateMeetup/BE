@@ -29,8 +29,8 @@ public class MapService {
         Meeting meeting = meetingService.getMeetingInfo(meetingId);
         Participant participant = participantService.findParticipantInfo(member,
             meeting);
-        participant.registerLocation(mapRegisterRequest.getLatitude(),
-            mapRegisterRequest.getLongitude());
+        participant.registerLocation(mapRegisterRequest.getLatitude().getLatitude(),
+            mapRegisterRequest.getLongitude().getLongitude());
         return MapResponse.builder().memberId(member.getId()).meetingId(meeting.getId())
             .latitude(participant.getLatitude()).longitude(
                 participant.getLongitude()).build();
@@ -42,8 +42,8 @@ public class MapService {
         Meeting meeting = meetingService.getMeetingInfo(meetingId);
         Participant participant = participantService.findParticipantInfo(member,
             meeting);
-        participant.registerLocation(mapRegisterRequest.getLatitude(),
-            mapRegisterRequest.getLongitude());
+        participant.registerLocation(mapRegisterRequest.getLatitude().getLatitude(),
+            mapRegisterRequest.getLongitude().getLongitude());
         return MapResponse.builder().memberId(member.getId()).meetingId(meeting.getId())
             .latitude(participant.getLatitude()).longitude(
                 participant.getLongitude()).build();

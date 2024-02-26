@@ -54,8 +54,8 @@ public class Participant {
         this.timeZone = timeZone;
     }
 
-    public void registerLocation(Latitude latitude, Longitude longitude) {
-        this.latitude = latitude.getLatitude();
-        this.longitude = longitude.getLongitude();
+    public void registerLocation(Long latitude, Long longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

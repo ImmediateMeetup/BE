@@ -5,5 +5,15 @@ import lombok.Value;
 @Value
 public class Latitude {
 
+    private static final Long LATITUDE_KOREA_MIN = 124L;
+    private static final Long LATITUDE_KOREA_MAX = 132L;
+
     Long latitude;
+
+    public Latitude(Long latitude) {
+        if (LATITUDE_KOREA_MIN < latitude && LATITUDE_KOREA_MAX > latitude) {
+            this.latitude = latitude;
+        }
+        throw new IllegalArgumentException("유효하지 않은 위도 값입니다.");
+    }
 }
