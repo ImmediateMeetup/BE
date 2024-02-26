@@ -17,15 +17,16 @@ public class Graham {
 
     public List<Point> calculate(List<Participant> participantList) {
 
-        ArrayList<Point> arr = new ArrayList<>();
+        ArrayList<Point> participantPointList = new ArrayList<>();
         // 1. 점들을 입력받는다.
 
         for (Participant participant : participantList) {
-            arr.add(new Point(participant.getLongitude(), participant.getLatitude()));
+            participantPointList.add(
+                new Point(participant.getLongitude(), participant.getLatitude()));
         }
 
         // w. 기준점을 구한다. 기준점은 y좌표가 작은순 -> x좌표가 작은 순
-        for (Point point : arr) {
+        for (Point point : participantPointList) {
             if (point.getY() < first.getY()
                 || (point.getY() == first.getY() && point.getX() < first.getX())) {
                 first = point;
@@ -33,7 +34,7 @@ public class Graham {
         }
 
         // 3. 기준점과 나머지점들이 ccw로 반시계방향(좌회전)이 되도록 정렬을 시키고, 만약 일직선상에 있으면 거리가 증가하게끔 정렬을 시킴
-        arr.sort(new Comparator<Point>() {
+        participantPointList.sort(new Comparator<Point>() {
 
             @Override
             public int compare(Point second, Point third) {
@@ -56,11 +57,13 @@ public class Graham {
         Stack<Point> s = new Stack<>();
         s.add(first);
 
-        for (int i = 1; i < arr.size(); i++) {
-            while (s.size() > 1 && ccw(s.get(s.size() - 2), s.get(s.size() - 1), arr.get(i)) <= 0) {
+        for (int i = 1; i < participantPointList.size(); i++) {
+            while (s.size() > 1
+                && ccw(s.get(s.size() - 2), s.get(s.size() - 1), participantPointList.get(i))
+                <= 0) {
                 s.pop();
             }
-            s.add(arr.get(i));
+            s.add(participantPointList.get(i));
         }
 
         return new ArrayList<>(s);

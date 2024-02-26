@@ -2,6 +2,7 @@ package com.example.immediatemeetupbe.domain.map.controller;
 
 import com.example.immediatemeetupbe.domain.map.dto.request.MapRegisterRequest;
 import com.example.immediatemeetupbe.domain.map.dto.response.MapResponse;
+import com.example.immediatemeetupbe.domain.map.dto.response.MemberMapResponse;
 import com.example.immediatemeetupbe.domain.map.service.MapService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +22,19 @@ public class MapController {
     private final MapService mapService;
 
     @PostMapping("/{meeting_id}")
-    public ResponseEntity<MapResponse> registerUserLocation(
+    public ResponseEntity<MemberMapResponse> registerUserLocation(
         @PathVariable("meeting_id") Long meeting_id,
         @RequestBody MapRegisterRequest mapRegisterRequest) {
         return ResponseEntity.ok()
-            .body(mapService.registerUserLocation(meeting_id, mapRegisterRequest));
+            .body(mapService.updateUserLocation(meeting_id, mapRegisterRequest));
     }
 
     @PatchMapping("/{meeting_id}")
-    public ResponseEntity<MapResponse> modifyUserLocation(
+    public ResponseEntity<MemberMapResponse> modifyUserLocation(
         @PathVariable("meeting_id") Long meeting_id,
         @RequestBody MapRegisterRequest mapRegisterRequest) {
         return ResponseEntity.ok()
-            .body(mapService.modifyUserLocation(meeting_id, mapRegisterRequest));
+            .body(mapService.updateUserLocation(meeting_id, mapRegisterRequest));
     }
 
     @GetMapping("/point/{meeting_id}")
