@@ -21,13 +21,12 @@ public class ParticipantController {
 
     @PostMapping()
     public ResponseEntity<ParticipantResponse> participantMeeting(
-        @PathVariable("meeting_id") Long meetingId,
-        @RequestBody ParticipantTimeRequest participantTimeRequest) {
+            @PathVariable("meeting_id") Long meetingId,
+            @RequestBody ParticipantTimeRequest participantTimeRequest) {
         return ResponseEntity.ok().body(
-            participantService.participantMeeting(meetingId, participantTimeRequest));
+                participantService.participantMeeting(meetingId, participantTimeRequest));
     }
-
-
+    
     @DeleteMapping()
     public ResponseEntity<Void> secedeMeeting(@PathVariable("meeting_id") Long meetingId) {
         participantService.secedeMeeting(meetingId);
