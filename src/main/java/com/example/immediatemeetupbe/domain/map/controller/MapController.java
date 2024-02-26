@@ -23,25 +23,25 @@ public class MapController {
 
     @PostMapping("/{meeting_id}")
     public ResponseEntity<MemberMapResponse> registerUserLocation(
-        @PathVariable("meeting_id") Long meeting_id,
-        @RequestBody MapRegisterRequest mapRegisterRequest) {
+            @PathVariable("meeting_id") Long meeting_id,
+            @RequestBody MapRegisterRequest mapRegisterRequest) {
         return ResponseEntity.ok()
-            .body(mapService.updateUserLocation(meeting_id, mapRegisterRequest));
+                .body(mapService.updateUserLocation(meeting_id, mapRegisterRequest));
     }
 
     @PatchMapping("/{meeting_id}")
     public ResponseEntity<MemberMapResponse> modifyUserLocation(
-        @PathVariable("meeting_id") Long meeting_id,
-        @RequestBody MapRegisterRequest mapRegisterRequest) {
+            @PathVariable("meeting_id") Long meeting_id,
+            @RequestBody MapRegisterRequest mapRegisterRequest) {
         return ResponseEntity.ok()
-            .body(mapService.updateUserLocation(meeting_id, mapRegisterRequest));
+                .body(mapService.updateUserLocation(meeting_id, mapRegisterRequest));
     }
 
     @GetMapping("/point/{meeting_id}")
     public ResponseEntity<MapResponse> getCalculatePoint(
-        @PathVariable("meeting_id") Long meeting_id) {
+            @PathVariable("meeting_id") Long meeting_id) {
         return ResponseEntity.ok()
-            .body(mapService.getCalculatePoint(meeting_id));
+                .body(mapService.getCalculatePoint(meeting_id));
     }
 
 }

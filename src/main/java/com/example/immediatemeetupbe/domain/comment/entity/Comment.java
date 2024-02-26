@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.comment.entity;
 
+import com.example.immediatemeetupbe.domain.BaseTimeEntity;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,8 +19,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +46,6 @@ public class Comment {
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> childComments = new ArrayList<>();
-
-    @CreatedDate
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "update_at")
-    private LocalDateTime updateAt;
 
     public void update(String content) {
         this.content = content;

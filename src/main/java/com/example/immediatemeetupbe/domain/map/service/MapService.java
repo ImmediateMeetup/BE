@@ -14,9 +14,11 @@ import com.example.immediatemeetupbe.domain.participant.entity.Participant;
 import com.example.immediatemeetupbe.domain.participant.service.ParticipantService;
 import com.example.immediatemeetupbe.global.exception.BusinessException;
 import com.example.immediatemeetupbe.global.jwt.AuthUtil;
+
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,22 +36,22 @@ public class MapService {
 
     @Transactional
     public MemberMapResponse updateUserLocation(Long meetingId,
-        MapRegisterRequest mapRegisterRequest) {
+                                                MapRegisterRequest mapRegisterRequest) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingService.getMeetingInfo(meetingId);
         Participant participant = participantService.findParticipantInfo(member,
-            meeting);
+                meeting);
         participant.registerLocation(mapRegisterRequest.getLatitude().getLatitude(),
-            mapRegisterRequest.getLongitude().getLongitude());
+                mapRegisterRequest.getLongitude().getLongitude());
         return MemberMapResponse.builder().memberId(member.getId()).meetingId(meeting.getId())
-            .latitude(participant.getLatitude()).longitude(
-                participant.getLongitude()).build();
+                .latitude(participant.getLatitude()).longitude(
+                        participant.getLongitude()).build();
     }
 
     @Transactional(readOnly = true)
     public MapResponse getCalculatePoint(Long meetingId) {
         List<Participant> participantList = participantService.getAllParticipantByMeetingId(
-            meetingId);
+                meetingId);
         List<Point> participantLocationList = graham.calculate(participantList);
         Point middlePoint = calculateMiddlePoint(participantLocationList);
         try {
@@ -59,15 +61,15 @@ public class MapService {
         }
         SubwayDto subwayDto = calculateNearSubway(middlePoint, subwayDtoList);
         return MapResponse.builder().subwayId(subwayDto.getSTATN_ID())
-            .subwayName(subwayDto.getSTATN_NM()).route(subwayDto.getROUTE())
-            .longitude(subwayDto.getCRDNT_X()).latitude(subwayDto.getCRDNT_Y()).build();
+                .subwayName(subwayDto.getSTATN_NM()).route(subwayDto.getROUTE())
+                .longitude(subwayDto.getCRDNT_X()).latitude(subwayDto.getCRDNT_Y()).build();
     }
 
     private SubwayDto calculateNearSubway(Point point, List<SubwayDto> subwayDtoList) {
         return subwayDtoList.stream()
-            .min(Comparator.comparingDouble(
-                subway -> getDistance(point.getX(), point.getY(), subway)))
-            .orElse(null);
+                .min(Comparator.comparingDouble(
+                        subway -> getDistance(point.getX(), point.getY(), subway)))
+                .orElse(null);
     }
 
     private double getDistance(double x, double y, SubwayDto subway) {

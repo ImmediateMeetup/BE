@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.notice.entity;
 
+import com.example.immediatemeetupbe.domain.BaseTimeEntity;
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,8 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Notice {
+public class Notice extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,14 +39,6 @@ public class Notice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
-
-    @CreatedDate
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "update_at")
-    private LocalDateTime updateAt;
 
     public void update(String title, String content) {
         this.title = title;

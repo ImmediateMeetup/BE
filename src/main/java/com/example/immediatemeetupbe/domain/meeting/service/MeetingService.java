@@ -170,11 +170,6 @@ public class MeetingService {
         redisService.deleteMeetingValue(AUTH_CODE_PREFIX + member.getId());
     }
 
-    @Transactional
-    public List<Meeting> findMeetingToDisable(LocalDate specificDate) {
-        return meetingRepository.findByLastDay(specificDate.toString());
-    }
-
     public void exitMeeting(Long meetingId) {
         Member member = authUtil.getLoginMember();
         Meeting meeting = meetingRepository.findById(meetingId)

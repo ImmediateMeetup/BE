@@ -1,5 +1,6 @@
 package com.example.immediatemeetupbe.domain.participant.entity;
 
+import com.example.immediatemeetupbe.domain.BaseTimeEntity;
 import com.example.immediatemeetupbe.domain.map.vo.Latitude;
 
 import com.example.immediatemeetupbe.domain.map.vo.Longitude;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @IdClass(ParticipantId.class)
 @Table(name = "participant")
-public class Participant {
+public class Participant extends BaseTimeEntity {
 
     @Id
     @ManyToOne
