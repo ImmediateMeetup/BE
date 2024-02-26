@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class MapResponse {
 
-    private Long memberId;
-    private Long meetingId;
-    private Long latitude;
-    private Long longitude;
-
+    private String subwayId;
+    private String subwayName;
+    private String route;
+    private double longitude;
+    private double latitude;
 }
