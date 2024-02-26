@@ -1,7 +1,7 @@
 package com.example.immediatemeetupbe.domain.participant.service;
 
 import com.example.immediatemeetupbe.domain.meeting.entity.Meeting;
-import com.example.immediatemeetupbe.domain.meeting.service.MeetingService;
+import com.example.immediatemeetupbe.domain.meeting.repository.MeetingRepository;
 import com.example.immediatemeetupbe.domain.member.entity.Member;
 import com.example.immediatemeetupbe.domain.participant.dto.request.ParticipantTimeRequest;
 import com.example.immediatemeetupbe.domain.participant.dto.response.ParticipantResponse;
@@ -25,7 +25,7 @@ import static com.example.immediatemeetupbe.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class ParticipantService {
 
-    private final MeetingService meetingService;
+    private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
     private final AuthUtil authUtil;
 
@@ -35,7 +35,7 @@ public class ParticipantService {
         ParticipantTimeRequest participantTimeRequest) {
         String timeZone = changeTimeToString(participantTimeRequest.getTimeList());
         Member member = authUtil.getLoginMember();
-        Meeting meeting = meetingService.getMeetingInfo(meetingId);
+        Meeting meeting = getMeeting(meetingId);
 
         if (participantRepository.existsByMemberAndMeeting(member, meeting)) {
             Participant existParticipant = participantRepository.findByMemberAndMeeting(member,
@@ -57,12 +57,12 @@ public class ParticipantService {
     @Transactional
     public void secedeMeeting(Long meetingId) {
         Member member = authUtil.getLoginMember();
-        Meeting meeting = meetingService.getMeetingInfo(meetingId);
+        Meeting meeting = getMeeting(meetingId);
         participantRepository.delete(findParticipantInfo(member, meeting));
     }
 
     public List<Participant> getAllParticipantByMeetingId(Long meetingId) {
-        return participantRepository.findAllByMeeting(meetingService.getMeetingInfo(meetingId));
+        return participantRepository.findAllByMeeting(getMeeting(meetingId));
     }
 
     private String changeTimeToString(List<LocalDateTime> memberTimeList) {
@@ -77,4 +77,10 @@ public class ParticipantService {
                 meeting)
             .orElseThrow(() -> new BusinessException(NO_EXIST_PARTICIPANT));
     }
+
+    private Meeting getMeeting(Long meetingId) {
+        return meetingRepository.findById(meetingId)
+            .orElseThrow(() -> new BusinessException(NO_EXIST_MEETING));
+    }
+
 }
