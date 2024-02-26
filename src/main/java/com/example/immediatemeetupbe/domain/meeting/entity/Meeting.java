@@ -61,8 +61,8 @@ public class Meeting extends BaseTimeEntity implements Serializable {
     @OneToMany(mappedBy = "meeting", orphanRemoval = true)
     private List<Notice> notices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "meeting")
     @JsonIgnore
+    @OneToMany(mappedBy = "meeting")
     @Cascade(CascadeType.ALL)
     private List<Participant> participantList = new ArrayList<>();
 
