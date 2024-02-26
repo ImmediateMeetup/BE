@@ -33,11 +33,15 @@ public enum ErrorCode {
 
     // NOTICE
     NO_EXIST_NOTICE(HttpStatus.NOT_FOUND, "N-001", "존재하지 않는 공지사항입니다"),
-    
+
     // PARTICIPANT
     NO_EXIST_PARTICIPANT(HttpStatus.BAD_REQUEST, "P-001", "미팅에 존재하는 참가자가 아닙니다."),
     NOT_HOST_OF_MEETING(HttpStatus.BAD_REQUEST, "P-002", "약속방의 방장이 아닙니다."),
-    ALREADY_INVITED(HttpStatus.BAD_REQUEST, "P-003", "이미 초대된 회원입니다.");
+    ALREADY_INVITED(HttpStatus.BAD_REQUEST, "P-003", "이미 초대된 회원입니다."),
+
+    // Map
+    FAIL_GET_SUBWAY_INFORMATION(HttpStatus.BAD_REQUEST, "M-001", "지하철 정보를 가져오는 데 실패했습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String errorCode;
