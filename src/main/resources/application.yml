@@ -43,7 +43,7 @@ spring:
 
   data:
     redis:
-      host: ec2-3-34-137-62.ap-northeast-2.compute.amazonaws.com
+      host: localhost
       port: 6379
 
 jwt:
