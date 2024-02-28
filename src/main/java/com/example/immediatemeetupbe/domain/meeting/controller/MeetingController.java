@@ -47,7 +47,7 @@ public class MeetingController {
     }
 
     @PostMapping("/invitations/{meetingId}/{memberId}")
-    public ResponseEntity<Void> inviteMember(@PathVariable Long meetingId, @PathVariable Long memberId) {
+    public ResponseEntity<Void> inviteMember(@PathVariable("meetingId") Long meetingId, @PathVariable("memberId") Long memberId) {
         meetingService.inviteMember(meetingId, memberId);
         return ResponseEntity.ok().build();
     }
