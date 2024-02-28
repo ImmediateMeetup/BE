@@ -62,7 +62,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberProfileResponse> retrieveMemberProfile(
-            @PathVariable Long memberId) {
+            @PathVariable("memberId") Long memberId) {
         return ResponseEntity.ok(memberService.retrieveMemberProfile(memberId));
     }
 
