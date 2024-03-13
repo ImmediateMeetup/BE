@@ -28,6 +28,10 @@
 - API 명세서
   - [Immediate-Meetup API 명세서](https://www.notion.so/Immediate-Meetup-API-a786213c144848fdb147a4917cb38771?pvs=21)
 
+### ERD
+![스크린샷 2024-03-13 191157](https://github.com/ImmediateMeetup/Immediate-Meetup-BE/assets/68328998/a48651e8-f3d6-4728-b2aa-c5cdb8910b6e)
+
+
 <br>
 
 ## 팀원 소개
