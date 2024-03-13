@@ -14,10 +14,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Partic
 
     List<Participant> findAllByMeeting(Meeting meeting);
 
-    boolean existsByMember(Member member);
-
-    Participant getMeetingByMember(Member member);
-
     boolean existsByMemberAndMeeting(Member member, Meeting meeting);
+
     Optional<Participant> findByMemberAndMeeting(Member member, Meeting meeting);
 }
