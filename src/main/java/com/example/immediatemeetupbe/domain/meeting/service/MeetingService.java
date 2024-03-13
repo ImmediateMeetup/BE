@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,9 +81,23 @@ public class MeetingService {
 
         meeting.getComments().removeIf(comment -> comment.getParent() != null);
 
-//        if(meeting.get)
+        List<Member> tempMemberList = new ArrayList<>();
 
-        return MeetingResponse.from(meeting);
+        participantService.getAllParticipantByMeetingId(id).forEach(participant -> {
+            tempMemberList.add(participant.getMember());
+        });
+
+        List<Long> MemberList = tempMemberList.stream()
+                .map(Member::getId)
+                .collect(Collectors.toList());
+
+        List<Member> temp = memberRepository.findAllById(MemberList);
+
+        List<String> nameList = temp.stream()
+                .map(Member::getName)
+                .collect(Collectors.toList());
+
+        return MeetingResponse.from(meeting, nameList);
     }
 
     @Transactional
